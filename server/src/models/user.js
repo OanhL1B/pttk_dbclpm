@@ -1,16 +1,25 @@
 "use strict";
-const { Model } = require("sequelize");
-module.exports = (sequelize, DataTypes) => {
+const { Model, DataTypes } = require("sequelize");
+const crypto = require("crypto");
+const bcrypt = require("bcrypt");
+
+module.exports = (sequelize) => {
   class User extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
     static associate(models) {
       // define association here
     }
+
+    createPasswordChangedToken() {
+      const resetToken = crypto.randomBytes(32).toString("hex");
+      this.passwordResetToken = crypto
+        .createHash("sha256")
+        .update(resetToken)
+        .digest("hex");
+      this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+      return resetToken;
+    }
   }
+
   User.init(
     {
       role: DataTypes.STRING,
@@ -22,11 +31,19 @@ module.exports = (sequelize, DataTypes) => {
       password: DataTypes.STRING,
       isBlock: DataTypes.BOOLEAN,
       image: DataTypes.STRING,
+      refreshToken: DataTypes.STRING,
+      passwordChangedAt: DataTypes.STRING,
+      passwordResetToken: DataTypes.STRING,
+      passwordResetExpires: DataTypes.DATE,
     },
     {
       sequelize,
       modelName: "User",
     }
   );
+  User.prototype.isCorrectPassword = async function (password) {
+    return await bcrypt.compare(password, this.password);
+  };
+
   return User;
 };
