@@ -32,6 +32,7 @@ const isAdminOrEmployee = (req, res, next) => {
 
 const isAdmin = (req, res, next) => {
   const { role } = req.user;
+  console.log("role", role);
   if (role !== "admin")
     return res.status(401).json({
       success: false,

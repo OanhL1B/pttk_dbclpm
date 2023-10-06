@@ -1,4 +1,3 @@
-import * as authService from "../services/auth";
 import db from "../models";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
@@ -35,7 +34,7 @@ export const register = async (req, res) => {
     });
 
     const token = jwt.sign(
-      { id: newUser.id, email: newUser.email },
+      { id: newUser.id, role: newUser.role },
       process.env.SECRET_KEY,
       { expiresIn: "2d" }
     );
@@ -77,7 +76,7 @@ export const login = async (req, res) => {
     }
 
     const accessToken = jwt.sign(
-      { id: user.id, email: user.email },
+      { id: user.id, role: user.role },
       process.env.SECRET_KEY,
       { expiresIn: "2d" }
     );
@@ -279,5 +278,158 @@ export const changePassword = async (req, res) => {
       success: false,
       message: "Lỗi server: " + error.message,
     });
+  }
+};
+
+export const getUsers = async (req, res) => {
+  try {
+    const response = await db.User.findAll({
+      attributes: {
+        exclude: ["refreshToken", "password"],
+      },
+    });
+
+    return res.status(200).json({
+      success: response ? true : false,
+      retObj: response,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
+export const deleteUser = async (req, res) => {
+  const { id } = req.query;
+  if (!id) {
+    return res.status(400).json({
+      success: false,
+      message: "Missing inputs",
+    });
+  }
+
+  try {
+    const user = await db.User.findOne({ where: { id } });
+
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    await user.destroy();
+
+    return res.status(200).json({
+      success: true,
+      message: `User with email ${user.email} deleted`,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error: " + error.message,
+    });
+  }
+};
+
+export const updateUser = async (req, res) => {
+  const { id } = req.user;
+  const { firstName, lastName, email, phone, address, image } = req.body;
+
+  try {
+    if (!id) {
+      throw new Error("Missing user ID");
+    }
+
+    const updatedUser = await db.User.findByPk(id);
+
+    if (!updatedUser) {
+      throw new Error("User not found");
+    }
+
+    updatedUser.firstName = firstName || updatedUser.firstName;
+    updatedUser.lastName = lastName || updatedUser.lastName;
+    updatedUser.email = email || updatedUser.email;
+    updatedUser.phone = phone || updatedUser.phone;
+    updatedUser.address = address || updatedUser.address;
+    updatedUser.image = image || updatedUser.image;
+
+    await updatedUser.save();
+
+    return res.status(200).json({
+      success: true,
+      updatedUser: updatedUser,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error: " + error.message,
+    });
+  }
+};
+
+export const updateUserByAdmin = async (req, res) => {
+  const {
+    userId,
+    firstName,
+    lastName,
+    email,
+    phone,
+    address,
+    image,
+    isBlock,
+    role,
+  } = req.body;
+
+  try {
+    if (!userId) {
+      throw new Error("Missing userId");
+    }
+
+    if (Object.keys(req.body).length === 1) {
+      throw new Error("Missing inputs");
+    }
+
+    const user = await db.User.findByPk(userId);
+
+    if (!user) {
+      throw new Error("User not found");
+    }
+
+    if (firstName) {
+      user.firstName = firstName;
+    }
+    if (lastName) {
+      user.lastName = lastName;
+    }
+    if (email) {
+      user.email = email;
+    }
+    if (phone) {
+      user.phone = phone;
+    }
+    if (address) {
+      user.address = address;
+    }
+    if (image) {
+      user.image = image;
+    }
+    if (role) {
+      user.role = role;
+    }
+    if (isBlock) {
+      user.isBlock = isBlock;
+    }
+
+    await user.save();
+
+    return res.status(200).json({
+      success: true,
+      updatedUser: user,
+    });
+  } catch (error) {
+    return res.status(500).json({ error: error.message });
   }
 };
