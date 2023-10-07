@@ -18,7 +18,6 @@ export const createCategory = async (req, res) => {
       id: v4(),
       categoryName: categoryName,
     });
-    console.log("newCategory", newCategory);
 
     return res.status(200).json({
       success: true,
@@ -33,7 +32,7 @@ export const createCategory = async (req, res) => {
   }
 };
 
-const getCategory = async (req, res) => {
+export const getCategory = async (req, res) => {
   try {
     const errors = { noCategoryError: String };
     const categoryId = req.params.id;
@@ -116,11 +115,39 @@ const updateCategory = async (req, res) => {
     res.status(500).json(errors);
   }
 };
+export const deleteCategory = async (req, res) => {
+  try {
+    const categories = req.body;
+    const errors = { categoryError: String };
+
+    for (let i = 0; i < categories.length; i++) {
+      const categoryId = categories[i];
+
+      const productsInCategory = await db.Product.findAll({
+        where: { category_id: categoryId },
+      });
+
+      if (productsInCategory.length > 0) {
+        return res.status(400).json({
+          categoryError: "Không thể xóa danh mục có chứa sản phẩm",
+        });
+      }
+
+      await db.Category.destroy({ where: { id: categoryId } });
+    }
+
+    res.status(200).json({ success: true, message: "Xóa danh mục thành công" });
+  } catch (error) {
+    const errors = { backendError: String };
+    errors.backendError = error.message || error;
+    res.status(500).json(errors);
+  }
+};
 
 module.exports = {
   createCategory,
   getCategory,
   getCategories,
   updateCategory,
-  // deleteCategory,
+  deleteCategory,
 };

@@ -18,11 +18,11 @@ router.put(
   [verifyToken, isAdminOrEmployee],
   categoryController.updateCategory
 );
-// router.delete(
-//   "/",
-//   [verifyToken, isAdminOrEmployee],
-//   categoryController.deleteCategory
-// );
+router.delete(
+  "/",
+  [verifyToken, isAdminOrEmployee],
+  categoryController.deleteCategory
+);
 router.get("/:id", categoryController.getCategory);
 
 export default router;
