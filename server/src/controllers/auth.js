@@ -95,6 +95,8 @@ export const login = async (req, res) => {
         phone: user.phone,
         address: user.address,
         image: user.image,
+        role: user.role,
+
         isBlock: user.isBlock,
       },
     });

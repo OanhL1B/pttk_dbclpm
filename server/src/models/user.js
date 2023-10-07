@@ -6,7 +6,10 @@ const bcrypt = require("bcrypt");
 module.exports = (sequelize) => {
   class User extends Model {
     static associate(models) {
-      // define association here
+      User.hasMany(models.Cart, {
+        foreignKey: "user_id",
+        as: "carts",
+      });
     }
 
     createPasswordChangedToken() {
