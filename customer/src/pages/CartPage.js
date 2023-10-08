@@ -40,7 +40,7 @@ const Cart = () => {
   const [updatedQuantities, setUpdatedQuantities] = useState({});
 
   useEffect(() => {
-    dispatch(getCartUser(user?.userData?._id));
+    dispatch(getCartUser(user?.userData?.id));
   }, []);
 
   console.log("userCarts", userCarts);
@@ -50,7 +50,7 @@ const Cart = () => {
       sum =
         sum +
         Number(
-          updatedQuantities[userCarts[index]._id] || userCarts[index].quantity
+          updatedQuantities[userCarts[index].id] || userCarts[index].quantity
         ) *
           userCarts[index].price;
     }
@@ -58,6 +58,7 @@ const Cart = () => {
   }, [userCarts, updatedQuantities]);
 
   const handleDelete = (id) => {
+    console.log("id", id);
     Swal.fire({
       title: "Bạn có chắc chắn muốn xóa?",
       text: "Hành động này sẽ không thể hoàn tác!",
@@ -75,7 +76,7 @@ const Cart = () => {
   useEffect(() => {
     if (store.errors || store.customer.deletedCart) {
       if (store.customer.deletedCart) {
-        dispatch(getCartUser(user?.userData?._id));
+        dispatch(getCartUser(user?.userData?.id));
         dispatch({ type: DELETE_CART, payload: false });
       }
     } else {
@@ -100,7 +101,7 @@ const Cart = () => {
       );
     }
     setTimeout(() => {
-      dispatch(getCartUser(user?.userData?._id));
+      dispatch(getCartUser(user?.userData?.id));
     }, 200);
   }, [updatedQuantities]);
 
@@ -137,7 +138,7 @@ const Cart = () => {
                     <div className="flex items-center justify-center mx-auto gap-x-6">
                       <div className="mr-4 w-30 h-30">
                         <img
-                          src={item?.thumb}
+                          src={item?.product?.thumb}
                           alt="Product"
                           className="w-30"
                           style={{ width: "300px" }}
@@ -145,11 +146,13 @@ const Cart = () => {
                       </div>
 
                       <div className="justify-center ml-10 text-center items-centers">
-                        <p className="font-bold">{item?.productName}</p>
+                        <p className="font-bold">
+                          {item?.product?.productName}
+                        </p>
                       </div>
                       <button
                         className="text-red-500"
-                        onClick={() => handleDelete(item.cartId)}
+                        onClick={() => handleDelete(item.id)}
                       >
                         Xóa
                       </button>
@@ -169,12 +172,12 @@ const Cart = () => {
                           max={10}
                           id=""
                           value={
-                            updatedQuantities[item.cartId] !== undefined
-                              ? updatedQuantities[item.cartId]
+                            updatedQuantities[item.id] !== undefined
+                              ? updatedQuantities[item.id]
                               : item.quantity
                           }
                           onChange={(e) => {
-                            handleUpdateQuantity(item.cartId, e.target.value);
+                            handleUpdateQuantity(item.id, e.target.value);
                           }}
                         />
                       </div>

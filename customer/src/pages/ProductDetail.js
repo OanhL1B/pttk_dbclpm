@@ -26,7 +26,7 @@ const ProductDetail = () => {
   };
   const { productId } = useParams();
   const [product, setProduct] = useState({});
-  console.log("product", product?.images);
+  console.log("product nè nè", product);
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState(null);
 
@@ -39,7 +39,7 @@ const ProductDetail = () => {
   const getProduct = async () => {
     try {
       const res = await APIPUBLIC.get("api/product/" + productId);
-      setProduct(res.data?.data);
+      setProduct(res.data?.retObj);
     } catch {}
   };
 
@@ -68,12 +68,13 @@ const ProductDetail = () => {
     }
     await dispatch(
       addCart({
-        productId: product._id,
-        userId: user?.userData?._id,
+        product_id: product.id,
+        user_id: user?.userData?.id,
         quantity,
+        price: product.price * quantity,
       })
     );
-    dispatch(getCartUser(user?.userData?._id));
+    dispatch(getCartUser(user?.userData?.id));
   };
 
   return (
@@ -86,13 +87,13 @@ const ProductDetail = () => {
         <div className="w-full md:w-1/2 md:p-5">
           <img
             src={product?.thumb}
-            alt={product.productName}
+            alt={product?.productName}
             className="object-cover w-full h-90vh md:h-40vh"
           />
           <h1>Những hình ảnh khác của sản phẩm:</h1>
           <div className="flex w-full mt-4">
             {product?.images &&
-              product?.images.map((i, index) => (
+              product?.images?.JSON?.parse?.map((i, index) => (
                 <img
                   key={index}
                   src={i}
@@ -105,10 +106,10 @@ const ProductDetail = () => {
 
         <div className="w-full md:w-1/2 md:p-5">
           <h1 className="mb-2 text-4xl  text-[#333333] font-medium">
-            {product.productName}
+            {product?.productName}
           </h1>
           <p className="p-4 mb-4  text-3xl text-[#d61c1f] font-bold">
-            {product.price}đ
+            {product?.price}đ
           </p>
 
           <p className="mb-4 font-base text-[#666666] font-normal">

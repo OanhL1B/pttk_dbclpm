@@ -49,6 +49,7 @@ export const getCartItems = async (req, res) => {
         {
           model: db.Product,
           as: "product",
+          attributes: ["id", "thumb", "productName"],
         },
       ],
     });

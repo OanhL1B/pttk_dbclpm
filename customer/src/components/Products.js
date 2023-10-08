@@ -32,12 +32,12 @@ const Products = ({ selectedCategoryId }) => {
 
   const filteredProducts = selectedCategoryId
     ? activeProducts.filter(
-        (product) => product.category._id === selectedCategoryId
+        (product) => product.category.id === selectedCategoryId
       )
     : activeProducts;
   const categoryFilteredProducts = selectedCategory
     ? filteredProducts.filter(
-        (product) => product.category._id === selectedCategory
+        (product) => product.category.id === selectedCategory
       )
     : filteredProducts;
   const sortedProducts = [...categoryFilteredProducts].sort((a, b) => {
@@ -64,7 +64,7 @@ const Products = ({ selectedCategoryId }) => {
           <MenuItem value={null}>Tất cả danh mục</MenuItem>
 
           {categories.map((category) => (
-            <MenuItem value={category._id} key={category._id}>
+            <MenuItem value={category.id} key={category.id}>
               {category.categoryName}
             </MenuItem>
           ))}
@@ -83,8 +83,8 @@ const Products = ({ selectedCategoryId }) => {
         </Select>
       </div>
       <div className="grid grid-cols-4 gap-4 px-40">
-        {sortedProducts.map((item) => (
-          <Product item={item} key={item._id} />
+        {products.map((item) => (
+          <Product item={item} key={item.id} />
         ))}
       </div>
     </div>

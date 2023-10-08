@@ -31,7 +31,7 @@ const Header = ({ onCategoryFilter }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getCartUser(user?.userData?._id));
+    dispatch(getCartUser(user?.userData?.id));
   }, []);
 
   const navigate = useNavigate();
@@ -132,10 +132,10 @@ const Header = ({ onCategoryFilter }) => {
                 <div className="absolute left-0 bg-white border border-gray-300 rounded shadow top-10 max-h-[500px] overflow-y-auto w-[300px]">
                   <div className="flex flex-wrap p-4">
                     {filteredList.map((product) => (
-                      <div key={product?._id}>
+                      <div key={product?.id}>
                         <div
                           className="flex items-center p-2 cursor-pointer"
-                          onClick={() => Handlenavigate(product._id)}
+                          onClick={() => Handlenavigate(product.id)}
                         >
                           <img
                             src={product?.thumb}
@@ -247,7 +247,7 @@ const Header = ({ onCategoryFilter }) => {
             alt=""
             height={60}
             width={60}
-            data-categoryid={categories[0]?._id}
+            data-categoryid={categories[0]?.id}
             onClick={(e) => handleCategoryClick(e)}
           />
         </div>
@@ -257,7 +257,7 @@ const Header = ({ onCategoryFilter }) => {
             alt=""
             width={86}
             height={60}
-            data-categoryid={categories[1]?._id}
+            data-categoryid={categories[1]?.id}
             onClick={(e) => handleCategoryClick(e)}
           />
         </div>
@@ -267,7 +267,7 @@ const Header = ({ onCategoryFilter }) => {
             alt=""
             width={79}
             height={60}
-            data-categoryid={categories[2]?._id}
+            data-categoryid={categories[2]?.id}
             onClick={(e) => handleCategoryClick(e)}
           />
         </div>
@@ -277,7 +277,7 @@ const Header = ({ onCategoryFilter }) => {
             alt=""
             width={120}
             height={60}
-            data-categoryid={categories[3]?._id}
+            data-categoryid={categories[3]?.id}
             onClick={(e) => handleCategoryClick(e)}
           />
         </div>

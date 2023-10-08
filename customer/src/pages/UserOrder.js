@@ -27,7 +27,7 @@ const UserOrder = () => {
     setIsFiltering(true);
   };
   useEffect(() => {
-    dispatch(getOrderUser(user?.userData?._id));
+    dispatch(getOrderUser(user?.userData?.id));
   }, []);
 
   const userOrders = useSelector((state) => state.customer?.userOrders);
@@ -48,7 +48,7 @@ const UserOrder = () => {
   };
   useEffect(() => {
     if (store.customer.deleteOrder) {
-      dispatch(getOrderUser(user?.userData?._id));
+      dispatch(getOrderUser(user?.userData?.id));
     }
   }, [dispatch, store.errors, store.customer.deleteOrder]);
 
@@ -146,7 +146,7 @@ const UserOrder = () => {
                     {order.status === "pending" && (
                       <button
                         className="px-4 py-2 text-white rounded bg-primary"
-                        onClick={() => handleCalceled(order._id)}
+                        onClick={() => handleCalceled(order.id)}
                       >
                         Hủy đơn hàng
                       </button>
