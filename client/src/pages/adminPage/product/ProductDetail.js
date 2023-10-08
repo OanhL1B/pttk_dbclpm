@@ -15,6 +15,10 @@ const modalStyles = {
 };
 
 const ProductDetail = ({ product, isOpen, onClose }) => {
+  const { images } = product;
+
+  const imageArray = JSON.parse(images);
+
   return (
     <ReactModal
       style={modalStyles}
@@ -55,7 +59,7 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
             <h1>Ảnh khác</h1>
             <div className="flex items-center ml-5 gap-x-6">
               <div className="flex gap-x-3">
-                {product?.images.map((imageUrl, index) => (
+                {imageArray.map((imageUrl, index) => (
                   <div
                     key={index}
                     className="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 mb-2"

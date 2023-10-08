@@ -71,37 +71,6 @@ const Sidebar = () => {
             <h1 className="font-normal">Sản phẩm</h1>
           </NavLink>
 
-          <NavLink
-            to="/manage-pricelist"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <PriceChangeIcon className="" />
-            <h1 className="font-normal">Bảng giá</h1>
-          </NavLink>
-
-          <NavLink
-            to="/manage-productprices"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <AttachMoneyIcon className="" />
-
-            <h1 className="font-normal">Giá sản phẩm</h1>
-          </NavLink>
-          <NavLink
-            to="/inventory"
-            className={({ isActive }) =>
-              isActive ? isActiveStyle : isNotActiveStyle
-            }
-          >
-            <AttachMoneyIcon className="" />
-
-            <h1 className="font-normal">Cập nhật kho</h1>
-          </NavLink>
-
           {user?.role === "admin" && (
             <NavLink
               to="/users"

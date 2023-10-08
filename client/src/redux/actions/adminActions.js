@@ -123,6 +123,7 @@ export const getProductPrices = () => async (dispatch) => {
 export const updateCategory = (formData) => async (dispatch) => {
   try {
     const { data } = await api.updateCategory(formData);
+    console.log("data", data);
     if (data.success === true) {
       toast.success("Cập nhật danh mục thành công!");
       dispatch({ type: UPDATE_CATEGORY, payload: true });

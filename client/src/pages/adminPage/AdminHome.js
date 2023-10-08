@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import Sidebar from "./SideBar";
 import Header from "./Header";
 import Body from "./Body";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   getCategories,
   getCurrentUser,

@@ -77,13 +77,16 @@ const updateCategory = async (req, res) => {
   try {
     const errors = { categoryError: String };
     const { categoryId, categoryName } = req.body;
+    console.log("categoryId", categoryId);
 
-    if (!categoryId) {
-      errors.categoryError = "Thiếu thông tin categoryId";
-      return res.status(400).json(errors);
-    }
+    // if (!categoryId) {
+    //   console.log("vô đây");
+    //   errors.categoryError = "Thiếu thông tin categoryId";
+    //   return res.status(400).json(errors);
+    // }
 
-    const category = await db.Category.findByPk(categoryId);
+    const category = await db?.Category?.findByPk(categoryId);
+
     if (!category) {
       return res.status(400).json({ categoryError: "Danh mục không tồn tại" });
     }

@@ -59,6 +59,7 @@ const Body = () => {
 
   // Begin-edit
   const [selectedProduct, setSelectedProduct] = useState("");
+  console.log("selectedProduct", selectedProduct);
   const modules = useMemo(
     () => ({
       toolbar: [
@@ -94,16 +95,17 @@ const Body = () => {
 
   const [value, setValue] = useState({
     productName: "",
-    category: "",
+    category_id: "",
     material: "",
     size: "",
     design: "",
     images: [],
     thumb: "",
     productId: "",
-    isActive: "",
+    product_status: "",
+    price: "",
+    quantity: "",
   });
-  console.log("value".value);
 
   const handleEditClick = (pod) => {
     setModalMode("edit");
@@ -111,14 +113,16 @@ const Body = () => {
     setIsModalOpen(true);
     setValue({
       productName: pod.productName,
-      category: "",
+      category_id: "",
       material: pod.material,
       size: pod.size,
       design: pod.design,
-      images: [],
+      images: pod.images,
       thumb: pod.thumb,
-      productId: pod._id,
-      isActive: pod.isActive,
+      productId: pod.id,
+      quantity: pod.quantity,
+      price: pod.price,
+      product_status: pod.product_status,
     });
   };
   const openModal = () => {
@@ -130,6 +134,7 @@ const Body = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const updatedValue = {};
+    // const imagesArray = JSON.stringify(value.images);
     if (value.productId !== "") {
       updatedValue.productId = value.productId;
     } else {
@@ -140,10 +145,10 @@ const Body = () => {
     } else {
       updatedValue.productName = selectedProduct.productName;
     }
-    if (value.category !== "") {
-      updatedValue.category = value.category;
+    if (value.category_id !== "") {
+      updatedValue.category_id = value.category_id;
     } else {
-      updatedValue.category = selectedProduct?.category?._id;
+      updatedValue.category_id = selectedProduct?.category?.id;
     }
     if (value.material !== "") {
       updatedValue.material = value.material;
@@ -155,6 +160,16 @@ const Body = () => {
     } else {
       updatedValue.size = selectedProduct.size;
     }
+    if (value.price !== "") {
+      updatedValue.price = value.price;
+    } else {
+      updatedValue.price = selectedProduct.price;
+    }
+    if (value.quantity !== "") {
+      updatedValue.quantity = value.quantity;
+    } else {
+      updatedValue.quantity = selectedProduct.quantity;
+    }
     if (value.design !== "") {
       updatedValue.design = value.design;
     } else {
@@ -164,19 +179,19 @@ const Body = () => {
     if (value.images.length > 0) {
       updatedValue.images = value.images;
     } else {
-      updatedValue.images = selectedProduct.images;
+      updatedValue.images = JSON.stringify(selectedProduct.images);
     }
     if (value.thumb !== "") {
       updatedValue.thumb = value.thumb;
     } else {
       updatedValue.thumb = selectedProduct.thumb;
     }
-    if (value.isActive !== "") {
-      updatedValue.isActive = value.isActive;
+    if (value.product_status !== "") {
+      updatedValue.product_status = value.product_status;
     } else {
-      updatedValue.isActive = selectedProduct.isActive;
+      updatedValue.product_status = selectedProduct.product_status;
     }
-
+    console.log("updatedValue", updatedValue);
     dispatch(updateProduct({ ...selectedProduct, ...updatedValue }));
     dispatch({ type: UPDATE_PRODUCT, payload: false });
   };
@@ -297,7 +312,7 @@ const Body = () => {
                       {product.quantity}
                     </td>
                     <td className="px-4 py-1 text-left border ">
-                      {product.isActive === true
+                      {product.product_status === true
                         ? "Còn kinh doanh"
                         : "Ngừng kinh doanh"}
                     </td>
@@ -371,7 +386,7 @@ const Body = () => {
                       {product.quantity}
                     </td>
                     <td className="px-4 py-1 text-left border ">
-                      {product.isActive === true
+                      {product.product_status === true
                         ? "Còn kinh doanh"
                         : "Ngừng kinh doanh"}
                     </td>
@@ -403,7 +418,7 @@ const Body = () => {
                       </button>
                       <button
                         className="items-center gap-[9px]  block px-3.5 py-1 font-bold text-[#7D1711] bg-[#FDD1D1] border border: 1.11647px solid #FD9999 rounded hover:bg-[#FD9999] focus:#FD9999 focus:shadow-outline"
-                        onClick={() => dltProduct(product._id)}
+                        onClick={() => dltProduct(product.id)}
                       >
                         Xóa
                       </button>
@@ -453,9 +468,9 @@ const Body = () => {
                     placeholder={selectedProduct?.category?.categoryName}
                     sx={{ height: 36 }}
                     inputProps={{ "aria-label": "Without label" }}
-                    value={value.category || selectedProduct?.category?._id}
+                    value={value.category_id || selectedProduct?.category?.id}
                     onChange={(e) =>
-                      setValue({ ...value, category: e.target.value })
+                      setValue({ ...value, category_id: e.target.value })
                     }
                     className={`${classes.InputStyle} hover:focus:border-none `}
                   >
@@ -463,7 +478,7 @@ const Body = () => {
                       {selectedProduct?.category?.categoryName}
                     </MenuItem>
                     {categories?.map((cate, idx) => (
-                      <MenuItem key={idx} value={cate._id}>
+                      <MenuItem key={idx} value={cate.id}>
                         {cate.categoryName}
                       </MenuItem>
                     ))}
@@ -499,6 +514,34 @@ const Body = () => {
                   />
                 </div>
                 <div className={classes.WrapInputLabel}>
+                  <h1 className={classes.LabelStyle}>Giá :</h1>
+
+                  <input
+                    placeholder="Giá"
+                    required
+                    className={classes.InputStyle}
+                    type="number"
+                    value={value.price}
+                    onChange={(e) =>
+                      setValue({ ...value, price: e.target.value })
+                    }
+                  />
+                </div>
+                <div className={classes.WrapInputLabel}>
+                  <h1 className={classes.LabelStyle}>Số lượng :</h1>
+
+                  <input
+                    placeholder="Số lượng"
+                    required
+                    className={classes.InputStyle}
+                    type="number"
+                    value={value.quantity}
+                    onChange={(e) =>
+                      setValue({ ...value, quantity: e.target.value })
+                    }
+                  />
+                </div>
+                <div className={classes.WrapInputLabel}>
                   <h1 className={classes.LabelStyle}>Thiết kế *:</h1>
 
                   <input
@@ -518,12 +561,16 @@ const Body = () => {
                   <Select
                     required
                     displayEmpty
-                    placeholder={value.isActive || selectedProduct?.isActive}
+                    placeholder={
+                      value.product_status || selectedProduct?.product_status
+                    }
                     sx={{ height: 36 }}
                     inputProps={{ "aria-label": "Without label" }}
-                    value={value.isActive || selectedProduct?.isActive}
+                    value={
+                      value.product_status || selectedProduct?.product_status
+                    }
                     onChange={(e) =>
-                      setValue({ ...value, isActive: e.target.value })
+                      setValue({ ...value, product_status: e.target.value })
                     }
                     className={`${classes.InputStyle} hover:focus:border-none `}
                   >
@@ -569,9 +616,9 @@ const Body = () => {
                 <div class="flex items-center  gap-x-6 ml-5">
                   <div class="flex  gap-x-3">
                     {(value.images.length > 0
-                      ? value.images
-                      : selectedProduct.images
-                    ).map((imageUrl, index) => (
+                      ? value.images?.JSON?.parse
+                      : selectedProduct?.images.JSON?.parse
+                    )?.map((imageUrl, index) => (
                       <div
                         key={index}
                         class="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 aspect-w-1 aspect-h-1"

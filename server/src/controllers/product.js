@@ -15,9 +15,11 @@ export const createProduct = async (req, res) => {
     quantity,
     // product_status,
   } = req.body;
-
+  console.log(" req.body", req.body);
   try {
-    if (!productName || !category_id || !description || !images) {
+    if (!productName && !category_id && !description) {
+      console.log(productName, category_id, description);
+      console.log("vô đây");
       return res.status(400).json({
         success: false,
         mes: "Missing inputs!",

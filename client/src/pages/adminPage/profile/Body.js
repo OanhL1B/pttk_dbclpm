@@ -40,7 +40,7 @@ const Body = () => {
     firstName: "",
     lastName: "",
     email: "",
-    phoneNumber: "",
+    phone: "",
     address: "",
     image: "",
   });
@@ -50,7 +50,7 @@ const Body = () => {
       firstName: "",
       lastName: "",
       email: user?.email,
-      phoneNumber: "",
+      phone: "",
       address: "",
       image: "",
     });
@@ -89,10 +89,10 @@ const Body = () => {
     } else {
       updatedValue.address = user.address;
     }
-    if (value.phoneNumber !== "") {
-      updatedValue.phoneNumber = value.phoneNumber;
+    if (value.phone !== "") {
+      updatedValue.phone = value.phone;
     } else {
-      updatedValue.phoneNumber = user.phoneNumber;
+      updatedValue.phone = user.phone;
     }
     if (value.image !== "") {
       updatedValue.image = value.image;
@@ -143,7 +143,7 @@ const Body = () => {
                   {user?.lastName} {user?.firstName}
                 </span>
                 <span>{user?.email}</span>
-                <span>{user?.phoneNumber}</span>
+                <span>{user?.phone}</span>
                 <span>{user?.address}</span>
                 <button
                   className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base mr-10 items-center "
@@ -219,11 +219,11 @@ const Body = () => {
                     <input
                       className={classes.InputStyle}
                       type="text"
-                      value={value.phoneNumber || user?.phoneNumber}
+                      value={value.phone || user?.phone}
                       onChange={(e) =>
                         setValue({
                           ...value,
-                          phoneNumber: e.target.value,
+                          phone: e.target.value,
                         })
                       }
                     />

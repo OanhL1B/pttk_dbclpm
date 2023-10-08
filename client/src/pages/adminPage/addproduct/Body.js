@@ -1,6 +1,5 @@
 import Spinner from "../../../utils/Spinner";
 import Select from "@mui/material/Select";
-import ReactSelect from "react-select";
 import ReactQuill from "react-quill";
 import React, { useEffect, useMemo, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
@@ -23,12 +22,14 @@ const Body = () => {
 
   const [value, setValue] = useState({
     productName: "",
-    category: "",
+    category_id: "",
     material: "",
     size: "",
     design: "",
     images: [],
     thumb: "",
+    quantity: "",
+    price: "",
   });
 
   useEffect(() => {
@@ -52,8 +53,9 @@ const Body = () => {
     e.preventDefault();
     setError({});
     setLoading(true);
+    const imagesArray = JSON.stringify(value.images);
 
-    dispatch(addProduct({ ...value, description }));
+    dispatch(addProduct({ ...value, images: imagesArray, description }));
   };
 
   useEffect(() => {
@@ -62,12 +64,13 @@ const Body = () => {
       if (store.admin.productAdded) {
         setValue({
           productName: "",
-          category: "",
+          category_id: "",
           material: "",
           size: "",
           design: "",
-          images: [],
+          images: "[]",
           thumb: "",
+          quantity: 10,
         });
         setDescription("");
         dispatch({ type: SET_ERRORS, payload: {} });
@@ -142,15 +145,15 @@ const Body = () => {
                   displayEmpty
                   sx={{ height: 36 }}
                   inputProps={{ "aria-label": "Without label" }}
-                  value={value.category}
+                  value={value.category_id}
                   onChange={(e) =>
-                    setValue({ ...value, category: e.target.value })
+                    setValue({ ...value, category_id: e.target.value })
                   }
                   className={`${classes.InputStyle} hover:focus:border-none `}
                 >
                   <MenuItem value="">None</MenuItem>
                   {categories?.map((cate, idx) => (
-                    <MenuItem key={idx} value={cate._id}>
+                    <MenuItem key={idx} value={cate.id}>
                       {cate.categoryName}
                     </MenuItem>
                   ))}
@@ -172,6 +175,20 @@ const Body = () => {
                 />
               </div>
               <div className={classes.WrapInputLabel}>
+                <h1 className={classes.LabelStyle}>Số lượng *:</h1>
+
+                <input
+                  placeholder="Số lượng"
+                  required
+                  className={classes.InputStyle}
+                  type="number"
+                  value={value.quantity}
+                  onChange={(e) =>
+                    setValue({ ...value, quantity: e.target.value })
+                  }
+                />
+              </div>
+              <div className={classes.WrapInputLabel}>
                 <h1 className={classes.LabelStyle}>Kích thước *:</h1>
 
                 <input
@@ -181,6 +198,20 @@ const Body = () => {
                   type="text"
                   value={value.size}
                   onChange={(e) => setValue({ ...value, size: e.target.value })}
+                />
+              </div>
+              <div className={classes.WrapInputLabel}>
+                <h1 className={classes.LabelStyle}>Giá *:</h1>
+
+                <input
+                  placeholder="Giá"
+                  required
+                  className={classes.InputStyle}
+                  type="number"
+                  value={value.price}
+                  onChange={(e) =>
+                    setValue({ ...value, price: e.target.value })
+                  }
                 />
               </div>
 
@@ -233,7 +264,7 @@ const Body = () => {
 
             <div class="flex items-center mt-10 gap-x-6">
               <div class="flex  gap-x-3">
-                {value.images.map((imageUrl, index) => (
+                {value.images?.JSON?.parse?.map((imageUrl, index) => (
                   <div
                     key={index}
                     class="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 aspect-w-1 aspect-h-1"
@@ -267,13 +298,14 @@ const Body = () => {
                   onClick={() => {
                     setValue({
                       productName: "",
-                      category: "",
+                      category_id: "",
                       material: "",
                       size: "",
                       design: "",
                       description: "",
                       images: [],
-
+                      price: "",
+                      quantity: "",
                       thumb: "",
                     });
                     setDescription("");

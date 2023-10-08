@@ -51,7 +51,7 @@ const Body = () => {
 
       dispatch(
         updatePassword({
-          userId: user?._id,
+          userId: user?.id,
           currentPassword: oldPassword,
           newPassword: newPassword,
         })

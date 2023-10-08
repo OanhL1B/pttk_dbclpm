@@ -65,7 +65,7 @@ const Body = () => {
     setIsModalOpen(true);
     setValue({
       categoryName: cate.categoryName,
-      categoryId: cate._id,
+      categoryId: cate.id,
     });
   };
 
@@ -90,7 +90,7 @@ const Body = () => {
       updatedValue.categoryId = selectedCategory.categoryId;
     }
 
-    dispatch(updateCategory({ ...selectedCategory, ...updatedValue }));
+    dispatch(updateCategory({ ...updatedValue }));
     dispatch({ type: UPDATE_CATEGORY, payload: false });
   };
 
@@ -176,7 +176,7 @@ const Body = () => {
                       </button>
                       <button
                         className="items-center gap-[9px]  block px-3.5 py-1 font-bold text-[#7D1711] bg-[#FDD1D1] border border: 1.11647px solid #FD9999 rounded hover:bg-[#FD9999] focus:#FD9999 focus:shadow-outline"
-                        onClick={() => dltCategory(cate._id)}
+                        onClick={() => dltCategory(cate.id)}
                       >
                         Xóa
                       </button>
