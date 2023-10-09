@@ -29,7 +29,9 @@ const modalStyles = {
     transform: "translate(-50%, -50%)",
     padding: "0",
     border: "none",
-    overflow: "auto",
+
+    overflowY: "scroll",
+    height: "600px",
   },
 };
 
@@ -59,7 +61,9 @@ const Body = () => {
 
   // Begin-edit
   const [selectedProduct, setSelectedProduct] = useState("");
-  console.log("selectedProduct", selectedProduct);
+  const imagesArray = selectedProduct
+    ? JSON.parse(selectedProduct?.images)
+    : [];
   const modules = useMemo(
     () => ({
       toolbar: [
@@ -94,6 +98,7 @@ const Body = () => {
   const [description, setDescription] = useState("");
 
   const [value, setValue] = useState({
+    productId: "",
     productName: "",
     category_id: "",
     material: "",
@@ -101,13 +106,13 @@ const Body = () => {
     design: "",
     images: [],
     thumb: "",
-    productId: "",
     product_status: "",
     price: "",
     quantity: "",
   });
 
   const handleEditClick = (pod) => {
+    console.log("pod", pod);
     setModalMode("edit");
     setSelectedProduct(pod);
     setIsModalOpen(true);
@@ -134,11 +139,10 @@ const Body = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
     const updatedValue = {};
-    // const imagesArray = JSON.stringify(value.images);
     if (value.productId !== "") {
-      updatedValue.productId = value.productId;
+      updatedValue.productId = selectedProduct.id;
     } else {
-      updatedValue.productId = selectedProduct.productId;
+      updatedValue.productId = selectedProduct.id;
     }
     if (value.productName !== "") {
       updatedValue.productName = value.productName;
@@ -191,7 +195,6 @@ const Body = () => {
     } else {
       updatedValue.product_status = selectedProduct.product_status;
     }
-    console.log("updatedValue", updatedValue);
     dispatch(updateProduct({ ...selectedProduct, ...updatedValue }));
     dispatch({ type: UPDATE_PRODUCT, payload: false });
   };
@@ -282,7 +285,7 @@ const Body = () => {
       <div className="w-full my-8 mt-6">
         {searchValue ? (
           <div className="overflow-auto max-h-[530px]">
-            <table className="w-full table-auto ">
+            <table className="table-auto ">
               <thead className="bg-[#E1EEEE] items-center sticky top-0">
                 <tr>
                   <th className="px-4 py-1">STT</th>
@@ -344,7 +347,7 @@ const Body = () => {
                       </button>
                       <button
                         className="items-center gap-[9px]  block px-3.5 py-1 font-bold text-[#7D1711] bg-[#FDD1D1] border border: 1.11647px solid #FD9999 rounded hover:bg-[#FD9999] focus:#FD9999 focus:shadow-outline"
-                        onClick={() => dltProduct(product._id)}
+                        onClick={() => dltProduct(product.id)}
                       >
                         Xóa
                       </button>
@@ -438,9 +441,9 @@ const Body = () => {
           style={modalStyles}
           ariaHideApp={false}
         >
-          <div className="flex flex-col mx-5 mt-10 rounded-xl">
+          <div className="flex flex-col  rounded-xl w-[1445px] min-h-[600px] ">
             <form
-              className="w-[1450px] min-h-[600px] py-5 px-7 text-center bg-[#fff] border rounded-md  shadow-md mx-auto"
+              className="w-full h-full py-5 px-7 text-center bg-[#fff] border rounded-md  shadow-md mx-auto"
               onSubmit={handleFormSubmit}
             >
               <div className="grid grid-cols-3 gap-x-10">
@@ -613,23 +616,22 @@ const Body = () => {
                     onUploadError={handleUploadError}
                   />
                 </div>
+
                 <div class="flex items-center  gap-x-6 ml-5">
                   <div class="flex  gap-x-3">
-                    {(value.images.length > 0
-                      ? value.images?.JSON?.parse
-                      : selectedProduct?.images.JSON?.parse
-                    )?.map((imageUrl, index) => (
-                      <div
-                        key={index}
-                        class="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 aspect-w-1 aspect-h-1"
-                      >
-                        <img
-                          src={imageUrl}
-                          alt=""
-                          class="object-cover w-full h-full"
-                        />
-                      </div>
-                    ))}
+                    {selectedProduct &&
+                      imagesArray.map((imageUrl, index) => (
+                        <div
+                          key={index}
+                          class="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 aspect-w-1 aspect-h-1"
+                        >
+                          <img
+                            src={imageUrl}
+                            alt=""
+                            class="object-cover w-full h-full"
+                          />
+                        </div>
+                      ))}
                   </div>
                   <div class="flex flex-col gap-y-5">
                     <h1 class="pb-2 text-sm font-medium text-left">

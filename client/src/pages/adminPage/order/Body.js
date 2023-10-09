@@ -45,13 +45,13 @@ const Body = () => {
                     </td>
 
                     <td className="items-center px-4 py-1 border">
-                      {user.status === "pending"
+                      {user.order_status === "pending"
                         ? "Chờ xác nhận"
-                        : user.status === "Shippped"
+                        : user.order_status === "Shippped"
                         ? "Đang giao hàng"
-                        : user.status === "delivered"
+                        : user.order_status === "delivered"
                         ? "Đã giao hàng"
-                        : user.status === "confirm"
+                        : user.order_status === "confirm"
                         ? "Đã xác nhận"
                         : " Đã hủy"}
                     </td>
@@ -62,8 +62,7 @@ const Body = () => {
                       {user.total_price}
                     </td>
                     <td className="items-center px-4 py-1 text-right border">
-                      {user?.Order_ReviewerId?.lastName}{" "}
-                      {user?.Order_ReviewerId?.firstName}
+                      {user?.user?.lastName} {user?.user?.firstName}
                     </td>
                     <td
                       className="items-center justify-center px-4 py-1 mr-0 border"
@@ -71,7 +70,7 @@ const Body = () => {
                     >
                       <button
                         className="px-3.5 py-1 font-bold text-white rounded hover:bg-[#04605E] bg-[#157572] focus:outline-none focus:shadow-outline text-base"
-                        onClick={() => navigate(`/order/${user._id}`)}
+                        onClick={() => navigate(`/order/${user.id}`)}
                       >
                         Sửa
                       </button>

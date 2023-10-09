@@ -153,7 +153,7 @@ const ProductDetail = ({ product, isOpen, onClose }) => {
                     Trạng thái
                   </td>
                   <td className="pr-4 text-left border border-primary">
-                    {product.isActive === true
+                    {product.product_status === true
                       ? "Còn kinh doanh"
                       : "Ngừng kinh doanh"}
                   </td>

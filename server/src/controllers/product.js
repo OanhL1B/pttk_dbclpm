@@ -1,5 +1,6 @@
 import db from "../models";
 import { v4 } from "uuid";
+const { Op } = require("sequelize");
 
 export const createProduct = async (req, res) => {
   const {
@@ -13,7 +14,6 @@ export const createProduct = async (req, res) => {
     design,
     price,
     quantity,
-    // product_status,
   } = req.body;
   console.log(" req.body", req.body);
   try {
@@ -150,11 +150,6 @@ export const updateProduct = async (req, res) => {
       product_status,
     } = req.body;
 
-    if (!productId) {
-      errors.productError = "Thiếu thông tin productId";
-      return res.status(400).json(errors);
-    }
-
     const product = await db.Product.findByPk(productId);
     if (!product) {
       return res.status(400).json({ productError: "Sản phẩm không tồn tại" });
@@ -192,10 +187,54 @@ export const updateProduct = async (req, res) => {
   }
 };
 
+export const deleteProduct = async (req, res) => {
+  try {
+    const errors = { productError: String };
+
+    for (let i = 0; i < req.body?.length; i++) {
+      const productId = req.body[i];
+
+      const productInCart = await db.Cart.findOne({
+        where: { product_id: productId },
+      });
+
+      const productInOrder = await db.Order.findOne({
+        where: {
+          order_status: { [Op.in]: ["pending", "shipped", "delivered"] },
+        },
+        include: [
+          {
+            model: db.Product_item,
+            as: "product",
+            where: { product_id: productId },
+          },
+        ],
+      });
+
+      console.log("productInOrder", productInOrder);
+      if (productInCart || productInOrder) {
+        return res.status(400).json({
+          productError:
+            "Không thể xóa sản phẩm đã có trong giỏ hàng hoặc đơn hàng",
+        });
+      }
+
+      await db.Product.destroy({ where: { id: productId } });
+    }
+
+    res.status(200).json({ success: true, message: "Xóa sản phẩm thành công" });
+  } catch (error) {
+    console.error("error", error);
+    const errors = { backendError: String };
+    errors.backendError = error.message || "Internal Server Error";
+    res.status(500).json(errors);
+  }
+};
+
 module.exports = {
   createProduct,
   getProduct,
   getProducts,
   updateProduct,
-  // deleteCategory,
+  deleteProduct,
 };

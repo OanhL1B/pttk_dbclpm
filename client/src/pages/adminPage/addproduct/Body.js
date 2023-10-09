@@ -68,9 +68,10 @@ const Body = () => {
           material: "",
           size: "",
           design: "",
-          images: "[]",
+          images: [],
           thumb: "",
-          quantity: 10,
+          quantity: "",
+          price: "",
         });
         setDescription("");
         dispatch({ type: SET_ERRORS, payload: {} });
@@ -264,7 +265,9 @@ const Body = () => {
 
             <div class="flex items-center mt-10 gap-x-6">
               <div class="flex  gap-x-3">
-                {value.images?.JSON?.parse?.map((imageUrl, index) => (
+                {console.log(value.images)}
+
+                {value.images?.map((imageUrl, index) => (
                   <div
                     key={index}
                     class="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 aspect-w-1 aspect-h-1"

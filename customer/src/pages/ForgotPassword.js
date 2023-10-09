@@ -87,7 +87,7 @@ const Body = () => {
                 </button>
               </Link>
             </div>
-            {error.mes ? <p className="text-red-500">{error.mes}</p> : null}
+            {error.error ? <p className="text-red-500">{error.error}</p> : null}
           </form>
         </div>
       </div>

@@ -10,7 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Order.hasMany(models.Product_item, {
         foreignKey: "order_id",
-        as: "items",
+        as: "product",
+      });
+      Order.belongsTo(models.User, {
+        foreignKey: "user_id",
+        as: "user",
       });
     }
   }
@@ -24,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
+
       modelName: "Order",
     }
   );

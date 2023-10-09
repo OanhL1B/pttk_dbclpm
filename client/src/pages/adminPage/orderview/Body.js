@@ -20,7 +20,7 @@ const Body = () => {
       try {
         const res = await APIV1.get("api/order/" + id);
         setOrder(res?.data?.retObj);
-        setStatusOrder(res?.data?.retObj?.status);
+        setStatusOrder(res?.data?.retObj?.order_status);
       } catch {}
     };
     getOrder();
@@ -32,12 +32,17 @@ const Body = () => {
       updateOrderStatus({
         orderId: id,
         status: statusE,
-        Order_ReviewerId: user._id,
+        Order_ReviewerId: user.id,
       })
     );
   };
 
-  const { shippingAddress, productItems, total_price, status } = order;
+  const { shipping_address, product, total_price, order_status } = order;
+  const shippingAddressObject = shipping_address
+    ? JSON?.parse(shipping_address)
+    : {};
+  console.log("shippingAddressObject", shippingAddressObject?.firstName);
+
   return (
     <div className="w-full my-8 mt-6 bg-bg_product">
       <div className="flex mx-4">
@@ -51,7 +56,7 @@ const Body = () => {
         <div className="flex items-center justify-between mb-4">
           <div>
             <p className="font-bold">Họ và tên:</p>
-            <p>{`${shippingAddress?.firstName} ${shippingAddress?.lastName}`}</p>
+            <p>{`${shippingAddressObject?.lastName} ${shippingAddressObject?.firstName}`}</p>
           </div>
           <div className="flex p-8 gap-x-5 ">
             <div className={classes.WrapInputLabel}>
@@ -59,7 +64,7 @@ const Body = () => {
               <Select
                 required
                 displayEmpty
-                placeholder={order.status}
+                placeholder={order.order_status}
                 sx={{ height: 36, width: 200 }}
                 inputProps={{ "aria-label": "Without label" }}
                 value={statusE || statusOrder}
@@ -69,16 +74,16 @@ const Body = () => {
                 <MenuItem value="pending" disabled>
                   Chờ xác nhận
                 </MenuItem>
-                {status === "delivered" ||
-                status === "canceled" ||
-                status === "shipped" ? (
+                {order_status === "delivered" ||
+                order_status === "canceled" ||
+                order_status === "shipped" ? (
                   <MenuItem value="confirm" disabled>
                     Xác nhận đơn hàng
                   </MenuItem>
                 ) : (
                   <MenuItem value="confirm"> Xác nhận đơn hàng</MenuItem>
                 )}
-                {status === "delivered" || status === "canceled" ? (
+                {order_status === "delivered" || order_status === "canceled" ? (
                   <MenuItem value="shipped" disabled>
                     Đang giao hàng
                   </MenuItem>
@@ -86,7 +91,7 @@ const Body = () => {
                   <MenuItem value="shipped">Đang giao hàng</MenuItem>
                 )}
 
-                {status === "canceled" ? (
+                {order_status === "canceled" ? (
                   <MenuItem value="delivered" disabled>
                     Đã giao hàng
                   </MenuItem>
@@ -106,7 +111,7 @@ const Body = () => {
           </div>
           <div>
             <p className="font-bold">Địa chỉ nhận hàng:</p>
-            <p>{shippingAddress?.address}</p>
+            <p>{shippingAddressObject?.address}</p>
           </div>
         </div>
         <div className="w-full">
@@ -128,29 +133,27 @@ const Body = () => {
               </tr>
             </thead>
             <tbody>
-              {productItems?.map((product, idx) => (
+              {product?.map((pod, idx) => (
                 <tr key={idx}>
                   <td className="px-4 py-2 border border-[#c7c2c2] text-center">
                     <div className="flex items-center gap-4">
                       <img
-                        src={product?.productId?.thumb}
+                        src={pod?.product?.thumb}
                         alt="Product"
                         className="w-16 h-16"
                       />
-                      <p className="font-bold">
-                        {product?.productId?.productName}
-                      </p>
+                      <p className="font-bold">{pod?.product?.productName}</p>
                     </div>
                   </td>
 
                   <td className="px-4 py-2 border border-[#c7c2c2] text-right">
-                    {product.quantity}
+                    {pod.quantity}
                   </td>
                   <td className="px-4 py-2 border border-[#c7c2c2] text-right">
-                    {product.price}
+                    {pod.price}
                   </td>
                   <td className="px-4 py-2 border border-[#c7c2c2] text-right">
-                    {product.quantity * product.price}
+                    {pod.quantity * pod.price}
                   </td>
                 </tr>
               ))}

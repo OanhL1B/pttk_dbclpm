@@ -50,7 +50,7 @@ const Checkout = () => {
     let items = [];
     for (let index = 0; index < userCarts?.length; index++) {
       items.push({
-        productId: userCarts[index].id,
+        product_id: userCarts[index].product_id,
         quantity: userCarts[index].quantity,
         price: userCarts[index].price,
       });
@@ -73,11 +73,7 @@ const Checkout = () => {
     const orderData = {
       userId: user?.userData?.id,
       productItems: cartProductState,
-      shippingAddress: {
-        firstName: shippingInfo.firstName,
-        lastName: shippingInfo.lastName,
-        address: shippingInfo.address,
-      },
+      shippingAddress: JSON.stringify(shippingInfo),
       total_price: totalAmount,
     };
 

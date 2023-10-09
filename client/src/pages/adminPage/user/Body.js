@@ -6,7 +6,6 @@ import {
   updateUserbyAdmin,
 } from "../../../redux/actions/adminActions";
 import * as classes from "../../../utils/styles";
-import Swal from "sweetalert2";
 import { SET_ERRORS, UPDATE_USER_BY_ADMIN } from "../../../redux/actionTypes";
 import { MenuItem, Select } from "@mui/material";
 
@@ -56,9 +55,9 @@ const Body = () => {
     firstName: "",
     lastName: "",
     email: "",
-    phoneNumber: "",
+    phone: "",
     role: "",
-    isBlocked: "",
+    isBlock: "",
   });
 
   const handleEditClick = (user) => {
@@ -69,10 +68,10 @@ const Body = () => {
       firstName: "",
       lastName: "",
       email: "",
-      phoneNumber: "",
+      phone: "",
       role: "",
-      isBlocked: "",
-      userId: user._id,
+      isBlock: "",
+      userId: user.id,
     });
   };
   const openModal = () => {
@@ -99,20 +98,20 @@ const Body = () => {
     } else {
       updatedValue.email = selectedUser.email;
     }
-    if (value.phoneNumber !== "") {
-      updatedValue.phoneNumber = value.phoneNumber;
+    if (value.phone !== "") {
+      updatedValue.phone = value.phone;
     } else {
-      updatedValue.phoneNumber = selectedUser.phoneNumber;
+      updatedValue.phone = selectedUser.phone;
     }
     if (value.role !== "") {
       updatedValue.role = value.role;
     } else {
       updatedValue.role = selectedUser.role;
     }
-    if (value.isBlocked !== "") {
-      updatedValue.isBlocked = value.isBlocked;
+    if (value.isBlock !== "") {
+      updatedValue.isBlock = value.isBlock;
     } else {
-      updatedValue.isBlocked = selectedUser.isBlocked;
+      updatedValue.isBlock = selectedUser.isBlock;
     }
     if (value.userId !== "") {
       updatedValue.userId = value.userId;
@@ -164,16 +163,14 @@ const Body = () => {
                       {user.lastName} {user.firstName}
                     </td>
                     <td className="px-4 py-1 text-left border">{user.email}</td>
-                    <td className="px-4 py-1 text-left border">
-                      {user.phoneNumber}
-                    </td>
+                    <td className="px-4 py-1 text-left border">{user.phone}</td>
                     <td className="px-4 py-1 text-left border">
                       {user.role === "admin" && "Admin"}
                       {user.role === "employee" && "Nhân viên"}
                       {user.role === "customer" && "Khách hàng"}
                     </td>
                     <td className="px-4 py-1 text-left border">
-                      {user.isBlocked === false ? "Hoạt động" : "Đã chặn"}
+                      {user.isBlock === false ? "Hoạt động" : "Đã chặn"}
                     </td>
                     <td
                       className="items-center justify-center px-4 py-1 mr-0 border"
@@ -238,7 +235,7 @@ const Body = () => {
                 <div className={classes.WrapInputLabel}>
                   <h1 className={classes.LabelStyle}>Số điện thoại :</h1>
                   <input
-                    placeholder={selectedUser?.phoneNumber}
+                    placeholder={selectedUser?.phone}
                     className={classes.InputStyle}
                     disabled
                     type="text"
@@ -267,13 +264,13 @@ const Body = () => {
                   <h1 className={classes.LabelStyle}>Trạng thái :</h1>
                   <Select
                     required
-                    placeholder={value.isBlocked || selectedUser.isBlocked}
+                    placeholder={value.isBlock || selectedUser.isBlock}
                     displayEmpty
                     sx={{ height: 36 }}
                     inputProps={{ "aria-label": "Without label" }}
-                    value={value.isBlocked || selectedUser.isBlocked}
+                    value={value.isBlock || selectedUser.isBlock}
                     onChange={(e) =>
-                      setValue({ ...value, isBlocked: e.target.value })
+                      setValue({ ...value, isBlock: e.target.value })
                     }
                     className={classes.InputStyle}
                   >

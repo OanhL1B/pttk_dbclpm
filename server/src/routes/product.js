@@ -19,11 +19,11 @@ router.put(
   [verifyToken, isAdminOrEmployee],
   productController.updateProduct
 );
-// router.delete(
-//   "/",
-//   [verifyToken, isAdminOrEmployee],
-//   productController.deleteProduct
-// );
+router.delete(
+  "/",
+  [verifyToken, isAdminOrEmployee],
+  productController.deleteProduct
+);
 router.get("/:id", productController.getProduct);
 
 module.exports = router;

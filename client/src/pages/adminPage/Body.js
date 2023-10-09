@@ -9,7 +9,7 @@ import Income from "../../components/Income";
 
 const Body = () => {
   const products = useSelector((state) => state.admin.allProduct);
-  // const orders = useSelector((state) => state.admin.allOrder);
+  const orders = useSelector((state) => state.admin.allOrder);
   const categories = useSelector((state) => state.admin.allCategory);
   const users = useSelector((state) => state.admin.allUsers);
   const user = useSelector((state) => state.admin.usercurrent);
@@ -66,7 +66,7 @@ const Body = () => {
 
             <div className="flex justify-between w-full h-full">
               <div>
-                {/* <h2 className="text-4xl font-bold">{orders?.length}</h2> */}
+                <h2 className="text-4xl font-bold">{orders?.length}</h2>
                 <span>Tống số đơn hàng</span>
               </div>
 

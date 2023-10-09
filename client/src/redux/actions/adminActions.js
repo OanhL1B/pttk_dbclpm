@@ -220,6 +220,7 @@ export const updateUserbyAdmin = (formData) => async (dispatch) => {
 export const getOrders = () => async (dispatch) => {
   try {
     const { data } = await api.getOrders();
+    console.log("data", data);
     if (data.success === true) {
       dispatch({ type: GET_ORDERS, payload: data.retObj });
     } else {
