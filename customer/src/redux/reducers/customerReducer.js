@@ -9,6 +9,7 @@ import {
   GET_CART_USER,
   GET_CURRENT_USER,
   GET_ORDER_USER,
+  GET_PRODUCTS_BY_CATEGORY,
   LOGIN,
   LOGOUT,
   QUEN_MAT_KHAU,
@@ -33,6 +34,7 @@ const initialState = {
   userOrders: [],
   allCategory: [],
   allProduct: [],
+  // product_category: [],
 };
 
 const customerReducer = (state = initialState, action) => {
@@ -128,6 +130,11 @@ const customerReducer = (state = initialState, action) => {
         allCategory: action.payload,
       };
     case GET_ALL_PRODUCTS:
+      return {
+        ...state,
+        allProduct: action.payload,
+      };
+    case GET_PRODUCTS_BY_CATEGORY:
       return {
         ...state,
         allProduct: action.payload,

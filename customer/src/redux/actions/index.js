@@ -10,6 +10,7 @@ import {
   GET_CART_USER,
   GET_CURRENT_USER,
   GET_ORDER_USER,
+  GET_PRODUCTS_BY_CATEGORY,
   LOGIN,
   QUEN_MAT_KHAU,
   RESET_PASSWORD,
@@ -242,6 +243,15 @@ export const getProducts = () => async (dispatch) => {
   try {
     const { data } = await api.getProducts();
     dispatch({ type: GET_ALL_PRODUCTS, payload: data.retObj });
+  } catch (error) {
+    console.log("Redux Error", error);
+  }
+};
+
+export const getProductsByCategory = (categoryId) => async (dispatch) => {
+  try {
+    const { data } = await api.getProductsByCategory(categoryId);
+    dispatch({ type: GET_PRODUCTS_BY_CATEGORY, payload: data.retObj });
   } catch (error) {
     console.log("Redux Error", error);
   }

@@ -7,6 +7,8 @@ import IngNar from "../components/IngNar";
 import Products from "../components/Products";
 import { useDispatch } from "react-redux";
 import { getCategories, getProducts } from "../redux/actions";
+import Title from "../components/Title";
+import IconCategory from "../components/IconCategory";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -14,9 +16,8 @@ const Home = () => {
     dispatch(getCategories());
     dispatch(getProducts());
   }, [dispatch]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [isFiltering, setIsFiltering] = useState(false);
-
   const handleCategoryFilter = (categoryId) => {
     setSelectedCategory(categoryId);
     setIsFiltering(true);
@@ -24,10 +25,9 @@ const Home = () => {
 
   return (
     <div>
-      <Header
-        onCategoryFilter={handleCategoryFilter}
-        selectedCategoryId={selectedCategory}
-      />
+      <Header />
+      <Title />
+      <IconCategory onCategoryFilter={handleCategoryFilter} />
       {isFiltering ? null : (
         <>
           <Sidebar />

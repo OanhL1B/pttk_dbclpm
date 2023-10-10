@@ -195,7 +195,10 @@ const Body = () => {
     } else {
       updatedValue.product_status = selectedProduct.product_status;
     }
-    dispatch(updateProduct({ ...selectedProduct, ...updatedValue }));
+
+    dispatch(
+      updateProduct({ ...selectedProduct, ...updatedValue, description })
+    );
     dispatch({ type: UPDATE_PRODUCT, payload: false });
   };
 

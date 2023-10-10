@@ -15,11 +15,9 @@ export const createProduct = async (req, res) => {
     price,
     quantity,
   } = req.body;
-  console.log(" req.body", req.body);
   try {
     if (!productName && !category_id && !description) {
       console.log(productName, category_id, description);
-      console.log("vô đây");
       return res.status(400).json({
         success: false,
         mes: "Missing inputs!",
@@ -67,7 +65,6 @@ export const getProduct = async (req, res) => {
   try {
     const errors = { noProductError: String };
     const productId = req.params.id;
-    console.log("productId", productId);
 
     const product = await db.Product.findOne({
       where: { id: productId },
@@ -231,10 +228,133 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
+// export const getProductsByCategory = async (req, res) => {
+//   try {
+//     const categoryId = req.params.categoryId; // Lấy ID danh mục từ tham số yêu cầu
+
+//     // Truy vấn sản phẩm dựa trên ID danh mục
+//     const products = await db.Product.findAll({
+//       where: {
+//         category_id: categoryId,
+//       },
+//       attributes: [
+//         "productName",
+//         "id",
+//         "description",
+//         "images",
+//         "thumb",
+//         "material",
+//         "size",
+//         "design",
+//         "product_status",
+//         "price",
+//         "quantity",
+//       ],
+//       include: [
+//         {
+//           model: db.Category,
+//           as: "category",
+//           attributes: ["id", "categoryName"],
+//         },
+//       ],
+//     });
+
+//     // Trả về kết quả
+//     res.status(200).json({
+//       success: true,
+//       message: "Hiển thị sản phẩm theo danh mục thành công",
+//       retObj: products,
+//     });
+//   } catch (error) {
+//     console.error("Lỗi Backend", error);
+//     res.status(500).json({
+//       success: false,
+//       message: "Lỗi server: " + error.message,
+//     });
+//   }
+// };
+export const getProductsByCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+
+    // Kiểm tra nếu categoryId là "all", trả về tất cả sản phẩm
+    if (categoryId === "all") {
+      const allProducts = await db.Product.findAll({
+        attributes: [
+          "productName",
+          "id",
+          "description",
+          "images",
+          "thumb",
+          "material",
+          "size",
+          "design",
+          "product_status",
+          "price",
+          "quantity",
+        ],
+        include: [
+          {
+            model: db.Category,
+            as: "category",
+            attributes: ["id", "categoryName"],
+          },
+        ],
+      });
+
+      res.status(200).json({
+        success: true,
+        message: "Hiển thị tất cả sản phẩm thành công",
+        retObj: allProducts,
+      });
+    } else {
+      // Nếu không phải là "all", thực hiện truy vấn theo categoryId
+      const products = await db.Product.findAll({
+        where: {
+          category_id: categoryId,
+        },
+        attributes: [
+          "productName",
+          "id",
+          "description",
+          "images",
+          "thumb",
+          "material",
+          "size",
+          "design",
+          "product_status",
+          "price",
+          "quantity",
+        ],
+        include: [
+          {
+            model: db.Category,
+            as: "category",
+            attributes: ["id", "categoryName"],
+          },
+        ],
+      });
+
+      res.status(200).json({
+        success: true,
+        message: "Hiển thị sản phẩm theo danh mục thành công",
+        retObj: products,
+      });
+    }
+  } catch (error) {
+    console.error("Lỗi Backend", error);
+    res.status(500).json({
+      success: false,
+      message: "Lỗi server: " + error.message,
+    });
+  }
+};
+
 module.exports = {
   createProduct,
   getProduct,
   getProducts,
   updateProduct,
   deleteProduct,
+  getProductsByCategory,
 };

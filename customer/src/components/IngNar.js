@@ -2,7 +2,7 @@ import React from "react";
 
 const IngNar = () => {
   return (
-    <div className="w-full px-40 mt-10 ">
+    <div className="w-full px-40 mt-10 border-t-2 ">
       <h2 className="mb-8 text-[#333333] text-4xl font-normal text-center">
         Instagram
       </h2>

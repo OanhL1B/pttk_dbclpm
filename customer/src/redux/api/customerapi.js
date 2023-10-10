@@ -31,3 +31,5 @@ export const getCurrentUser = () => APIV1.get("/api/user/current");
 export const getCategories = () => APIV1.get("/api/category");
 // product
 export const getProducts = () => APIV1.get("/api/product");
+export const getProductsByCategory = (categoryId) =>
+  APIPUBLIC.get(`/api/product/category/${categoryId}`);

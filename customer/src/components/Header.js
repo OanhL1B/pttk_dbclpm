@@ -9,27 +9,10 @@ import { getCartUser } from "../redux/actions";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import axios from "axios";
-const Header = ({ onCategoryFilter }) => {
-  const handleCategoryClick = (event) => {
-    const categoryId = event.target.getAttribute("data-categoryid");
-    if (categoryId === "all") {
-      onCategoryFilter(null);
-    } else {
-      onCategoryFilter(categoryId);
-    }
-  };
-
+const Header = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const quantity = useSelector((state) => state.customer?.userCarts);
-  const store = useSelector((state) => state);
-  const categories = useSelector((state) => state.customer.allCategory);
-  const products = useSelector((state) => state.customer.allProduct);
-  console.log("products", products);
-
-  console.log("categories", categories);
-
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(getCartUser(user?.userData?.id));
   }, []);
@@ -51,8 +34,9 @@ const Header = ({ onCategoryFilter }) => {
     });
   };
 
-  // phục vụ phần lọc
+  // phục vụ phần tìm kiếm theo tên sản phẩm
   const [productfilters, setProductFilters] = useState([]);
+  console.log("productfilters", productfilters);
 
   useEffect(() => {
     const getProducts = async () => {
@@ -64,7 +48,9 @@ const Header = ({ onCategoryFilter }) => {
     getProducts();
   }, []);
 
-  const activeProductFilters = productfilters.filter((item) => item?.isActive);
+  const activeProductFilters = productfilters.filter(
+    (item) => item?.product_status
+  );
   // handle search
   const [filteredList, setFilteredList] = new useState([]);
   const [searchValue, setSearchValue] = useState("");
@@ -211,75 +197,6 @@ const Header = ({ onCategoryFilter }) => {
               </div>
             )}
           </div>
-        </div>
-      </div>
-
-      <div className="pt-[50px] mb-4 ">
-        <div className="w-full bg-[#FFFFFF] text-[#000000] font-normal text-base p-2">
-          <div className="w-full h-full pt-3 bg-white">
-            <div className="flex flex-col items-center">
-              <div className="flex items-center text-center">
-                <div className="ml-24 ">ABOUT US</div>
-                <div className="ml-24 ">ADDRESS</div>
-                <Link to="/">
-                  <div className="mx-24 ">
-                    <div>
-                      <img
-                        src="https://theme.hstatic.net/1000365849/1000614631/14/logo.png?v=144"
-                        alt=""
-                        width={150}
-                      />
-                    </div>
-                  </div>
-                </Link>
-                <div className="mr-24">BLOG</div>
-                <div className="mr-24">MEMBERSHIP</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex items-center justify-center w-full h-full mb-3 border-b-2 ">
-        <div className="flex px-10">
-          <img
-            src="https://theme.hstatic.net/1000365849/1000614631/14/baloden.svg?v=144"
-            alt=""
-            height={60}
-            width={60}
-            data-categoryid={categories[0]?.id}
-            onClick={(e) => handleCategoryClick(e)}
-          />
-        </div>
-        <div className="flex px-10 border-l-2">
-          <img
-            src="https://theme.hstatic.net/1000365849/1000614631/14/viden.svg?v=144"
-            alt=""
-            width={86}
-            height={60}
-            data-categoryid={categories[1]?.id}
-            onClick={(e) => handleCategoryClick(e)}
-          />
-        </div>
-        <div className="flex px-10 border-l-2 border-r-2">
-          <img
-            src="https://theme.hstatic.net/1000365849/1000614631/14/tuixachden.svg?v=144"
-            alt=""
-            width={79}
-            height={60}
-            data-categoryid={categories[2]?.id}
-            onClick={(e) => handleCategoryClick(e)}
-          />
-        </div>
-        <div className="flex px-10">
-          <img
-            src="https://theme.hstatic.net/1000365849/1000614631/14/tuicheoden.svg?v=144"
-            alt=""
-            width={120}
-            height={60}
-            data-categoryid={categories[3]?.id}
-            onClick={(e) => handleCategoryClick(e)}
-          />
         </div>
       </div>
     </div>

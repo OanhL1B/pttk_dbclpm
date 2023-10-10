@@ -6,7 +6,6 @@ const Product = ({ item }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("user"));
-  console.log("user", user);
   const isOutOfStock = item.quantity === 0;
   const handleClick = async () => {
     if (!user) {

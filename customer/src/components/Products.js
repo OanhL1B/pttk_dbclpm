@@ -1,77 +1,54 @@
 import { useEffect, useState } from "react";
 import Product from "./Product";
-import axios from "axios";
-import { MenuItem, Select } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
-import { getCategories } from "../redux/actions";
+import { getProducts, getProductsByCategory } from "../redux/actions";
+import { MenuItem, Select } from "@mui/material";
 
 const Products = ({ selectedCategoryId }) => {
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const products = useSelector((state) => state.customer.allProduct);
+  const categories = useSelector((state) => state.customer.allCategory);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getCategories());
-  }, [dispatch]);
-  const categories = useSelector((state) => state.customer.allCategory);
-
-  const [products, setProducts] = useState([]);
-  const [sortType, setSortType] = useState("None");
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  useEffect(() => {
-    const getProducts = async () => {
-      try {
-        const res = await axios.get("http://localhost:5000/api/product");
-        setProducts(res.data.retObj);
-      } catch (err) {
-        console.error("Error fetching products:", err);
-      }
-    };
-    getProducts();
+    dispatch(getProducts());
   }, []);
+  useEffect(() => {
+    if (!selectedCategoryId) return;
+    dispatch(getProductsByCategory(selectedCategoryId));
+  }, [selectedCategoryId]);
 
-  const activeProducts = products.filter((item) => item?.isActive);
-  console.log("activeProducts", activeProducts);
-
-  const filteredProducts = selectedCategoryId
-    ? activeProducts.filter(
-        (product) => product.category.id === selectedCategoryId
-      )
-    : activeProducts;
-  const categoryFilteredProducts = selectedCategory
-    ? filteredProducts.filter(
-        (product) => product.category.id === selectedCategory
-      )
-    : filteredProducts;
-  const sortedProducts = [...categoryFilteredProducts].sort((a, b) => {
-    if (sortType === "lowToHigh") {
-      return a.price - b.price;
-    } else {
-      return b.price - a.price;
-    }
-  });
+  useEffect(() => {
+    if (!selectedCategory) return;
+    dispatch(getProductsByCategory(selectedCategory));
+  }, [selectedCategory]);
 
   return (
-    <div>
-      <div className="flex justify-end mt-4 mr-40">
-        <h1 className="items-center justify-center mt-2 mr-2">
-          Lọc theo danh mục:
+    <div className="mt-10 border-t-2">
+      <div className="flex justify-between mt-10 mr-40 ">
+        <h1 className="mx-auto text-xl font-semibold">
+          Sản phẩm ví thời trang sành điệu
         </h1>
+        <div className="flex gap-y-6">
+          <h1 className="items-center justify-center mt-2 mr-2">
+            Lọc theo danh mục:
+          </h1>
 
-        <Select
-          value={selectedCategory}
-          onChange={(e) => setSelectedCategory(e.target.value)}
-          className="p-1 bg-gray-100 rounded-md"
-          sx={{ height: 30, width: 200, marginRight: 10 }}
-        >
-          <MenuItem value={null}>Tất cả danh mục</MenuItem>
+          <Select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="p-1 bg-gray-100 rounded-md"
+            sx={{ height: 30, width: 200, marginRight: 10 }}
+          >
+            <MenuItem value="all">Tất cả danh mục</MenuItem>
+            {categories.map((category) => (
+              <MenuItem value={category.id}>{category.categoryName}</MenuItem>
+            ))}
+          </Select>
 
-          {categories.map((category) => (
-            <MenuItem value={category.id} key={category.id}>
-              {category.categoryName}
-            </MenuItem>
-          ))}
-        </Select>
-
-        <h1 className="items-center justify-center mt-2 mr-2">Lọc theo giá:</h1>
-        <Select
+          <h1 className="items-center justify-center mt-2 mr-2">
+            Lọc theo giá:
+          </h1>
+          {/* <Select
           value={sortType}
           onChange={(e) => setSortType(e.target.value)}
           className="p-1 bg-gray-100 rounded-md "
@@ -80,11 +57,13 @@ const Products = ({ selectedCategoryId }) => {
           <MenuItem value="None">None</MenuItem>
           <MenuItem value="lowToHigh">Giá từ thấp tới cao</MenuItem>
           <MenuItem value="highToLow">Giá từ cao tới thấp</MenuItem>
-        </Select>
+        </Select> */}
+        </div>
       </div>
+
       <div className="grid grid-cols-4 gap-4 px-40">
         {products.map((item) => (
-          <Product item={item} key={item.id} />
+          <Product item={item} key={item._id} />
         ))}
       </div>
     </div>

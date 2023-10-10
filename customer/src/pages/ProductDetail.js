@@ -12,6 +12,8 @@ import {
   getCategories,
   getProducts,
 } from "../redux/actions";
+import Title from "../components/Title";
+import IconCategory from "../components/IconCategory";
 const ProductDetail = () => {
   const dispatch = useDispatch();
   useEffect(() => {
@@ -19,14 +21,13 @@ const ProductDetail = () => {
     dispatch(getProducts());
   }, [dispatch]);
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isFiltering, setIsFiltering] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+
   const handleCategoryFilter = (categoryId) => {
     setSelectedCategory(categoryId);
-    setIsFiltering(true);
   };
   const { productId } = useParams();
   const [product, setProduct] = useState({});
-  console.log("product nè nè", product);
   const [quantity, setQuantity] = useState(1);
   const [error, setError] = useState(null);
 
@@ -40,6 +41,9 @@ const ProductDetail = () => {
     try {
       const res = await APIPUBLIC.get("api/product/" + productId);
       setProduct(res.data?.retObj);
+      if (res.data?.retObj?.thumb) {
+        setSelectedImage(res.data?.retObj?.thumb);
+      }
     } catch {}
   };
 
@@ -77,33 +81,39 @@ const ProductDetail = () => {
     dispatch(getCartUser(user?.userData?.id));
   };
 
+  const { images, thumb } = product;
+  const imageArray = images ? JSON?.parse(images) : [];
+
+  if (thumb) {
+    imageArray.push(thumb);
+  }
   return (
     <div className="bg-gray-100">
-      <Header
-        onCategoryFilter={handleCategoryFilter}
-        selectedCategoryId={selectedCategory}
-      />
+      <Header onCategoryFilter={handleCategoryFilter} />
+      <Title />
+      <IconCategory onCategoryFilter={handleCategoryFilter} />
       <div className="p-10 md:flex md:justify-center">
-        <div className="w-full md:w-1/2 md:p-5">
-          <img
-            src={product?.thumb}
-            alt={product?.productName}
-            className="object-cover w-full h-90vh md:h-40vh"
-          />
-          <h1>Những hình ảnh khác của sản phẩm:</h1>
-          <div className="flex w-full mt-4">
+        <div className="flex flex-col items-center space-y-4">
+          <div className="w-full max-w-xs md:max-w-2xl">
+            {selectedImage && (
+              <img src={selectedImage} alt="Main" className="w-[80%] h-auto" />
+            )}{" "}
+          </div>
+          <div className="flex space-x-4">
             {product?.images &&
-              product?.images?.JSON?.parse?.map((i, index) => (
+              imageArray.map((image, index) => (
                 <img
                   key={index}
-                  src={i}
-                  alt={`Anh ${index}`}
-                  className="object-cover w-full max-w-xs mr-2 h-90vh md:h-40vh"
+                  src={image}
+                  alt={`Thumbnail ${index}`}
+                  onClick={() => setSelectedImage(image)}
+                  className={`object-cover w-16 h-16 border border-gray-300 cursor-pointer md:w-24 md:h-24 hover:border-blue-500 ${
+                    selectedImage === image ? "border-blue-500" : ""
+                  }`}
                 />
               ))}
           </div>
         </div>
-
         <div className="w-full md:w-1/2 md:p-5">
           <h1 className="mb-2 text-4xl  text-[#333333] font-medium">
             {product?.productName}

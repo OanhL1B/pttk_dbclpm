@@ -1,35 +1,44 @@
-import React from "react";
-import { Pagination } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/pagination";
-import "swiper/css/scrollbar";
 import { sliderItems } from "../data";
 
-const Sidebar = () => {
+import React from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
+
+export default function App() {
   return (
-    <Swiper
-      modules={[Pagination]}
-      grabCursor={true}
-      spaceBetween={3}
-      slidesPerView={"auto"}
-      autoplay={{ delay: 3000, disableOnInteraction: false }}
-      loop={true}
-      pagination={{ clickable: true }}
-    >
-      {sliderItems.length > 0 &&
-        sliderItems.map((item) => (
-          <SwiperSlide key={item.id}>
-            <BannerItem item={item}></BannerItem>
-          </SwiperSlide>
-        ))}
-    </Swiper>
+    <>
+      <Swiper
+        spaceBetween={30}
+        centeredSlides={true}
+        autoplay={{
+          delay: 2500,
+          disableOnInteraction: false,
+        }}
+        pagination={{
+          clickable: true,
+        }}
+        navigation={true}
+        modules={[Autoplay, Pagination, Navigation]}
+        className="mySwiper"
+      >
+        {sliderItems.length > 0 &&
+          sliderItems.map((item) => (
+            <SwiperSlide key={item.id}>
+              <BannerItem item={item}></BannerItem>
+            </SwiperSlide>
+          ))}
+      </Swiper>
+    </>
   );
-};
+}
 
 function BannerItem({ item }) {
-  const { title, img, id } = item;
+  const { img } = item;
   return (
     <div className="relative w-full h-full bg-white rounded-lg">
       <div className="absolute inset-0 overlay "></div>
@@ -40,4 +49,3 @@ function BannerItem({ item }) {
     </div>
   );
 }
-export default Sidebar;
