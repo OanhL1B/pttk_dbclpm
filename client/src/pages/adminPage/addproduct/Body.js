@@ -265,8 +265,6 @@ const Body = () => {
 
             <div class="flex items-center mt-10 gap-x-6">
               <div class="flex  gap-x-3">
-                {console.log(value.images)}
-
                 {value.images?.map((imageUrl, index) => (
                   <div
                     key={index}

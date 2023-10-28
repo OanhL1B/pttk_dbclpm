@@ -1,6 +1,7 @@
 import {
   ADD_CART,
   ADD_ORDER,
+  ADD_REVIEW,
   ADD_USER,
   CANCELED,
   DELETE_CART,
@@ -10,6 +11,7 @@ import {
   GET_CURRENT_USER,
   GET_ORDER_USER,
   GET_PRODUCTS_BY_CATEGORY,
+  GET_PRODUCT_REVIEWS,
   LOGIN,
   LOGOUT,
   QUEN_MAT_KHAU,
@@ -21,6 +23,7 @@ import {
 const initialState = {
   authData: JSON.parse(localStorage.getItem("user")) || null,
   userAdded: false,
+  reviewAdded: false,
   orderAdded: false,
   updatedCart: false,
   deleteOrder: false,
@@ -34,7 +37,7 @@ const initialState = {
   userOrders: [],
   allCategory: [],
   allProduct: [],
-  // product_category: [],
+  allReview: [],
 };
 
 const customerReducer = (state = initialState, action) => {
@@ -47,12 +50,17 @@ const customerReducer = (state = initialState, action) => {
         ...state,
         userAdded: action.payload,
       };
+
     case ADD_ORDER:
       return {
         ...state,
         orderAdded: action.payload,
       };
-
+    case ADD_REVIEW:
+      return {
+        ...state,
+        reviewAdded: action.payload,
+      };
     case ADD_CART:
       const existingProduct = state.userCarts?.find(
         (item) => item.productId._id === action.payload.productId
@@ -138,6 +146,11 @@ const customerReducer = (state = initialState, action) => {
       return {
         ...state,
         allProduct: action.payload,
+      };
+    case GET_PRODUCT_REVIEWS:
+      return {
+        ...state,
+        allReview: action.payload,
       };
     default:
       return state;

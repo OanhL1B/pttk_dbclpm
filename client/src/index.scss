@@ -36,16 +36,15 @@ input:focus + .error-input {
 
 /* CSS */
 .modal-container {
-  // position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  max-height: 80vh; /* Đặt kích thước tối đa là 80% chiều cao của viewport */
-  width: 90%; /* Đặt chiều rộng modal */
-  max-width: 600px; /* Đặt chiều rộng tối đa của modal */
-  overflow-y: auto; /* Hiển thị thanh cuộn khi nội dung vượt quá kích thước tối đa */
-  background-color: white; /* Màu nền của modal */
-  padding: 1rem; /* Padding bên trong modal */
-  border-radius: 8px; /* Bo góc modal */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Hiệu ứng bóng đổ */
+  max-height: 80vh;
+  width: 90%;
+  max-width: 600px;
+  overflow-y: auto;
+  background-color: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }

@@ -25,7 +25,6 @@ export const createCategory = async (req, res) => {
       retObj: newCategory,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).json({
       message: error.message,
     });
@@ -66,7 +65,6 @@ const getCategories = async (req, res) => {
       retObj: categories,
     });
   } catch (error) {
-    console.log("Lỗi Backend", error);
     res.status(500).json({
       success: false,
       message: "Lỗi server: " + error.message,
@@ -77,13 +75,6 @@ const updateCategory = async (req, res) => {
   try {
     const errors = { categoryError: String };
     const { categoryId, categoryName } = req.body;
-    console.log("categoryId", categoryId);
-
-    // if (!categoryId) {
-    //   console.log("vô đây");
-    //   errors.categoryError = "Thiếu thông tin categoryId";
-    //   return res.status(400).json(errors);
-    // }
 
     const category = await db?.Category?.findByPk(categoryId);
 

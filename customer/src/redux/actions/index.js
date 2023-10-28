@@ -2,6 +2,7 @@ import { toast } from "react-toastify";
 import {
   ADD_CART,
   ADD_ORDER,
+  ADD_REVIEW,
   ADD_USER,
   CANCELED,
   DELETE_CART,
@@ -11,6 +12,7 @@ import {
   GET_CURRENT_USER,
   GET_ORDER_USER,
   GET_PRODUCTS_BY_CATEGORY,
+  GET_PRODUCT_REVIEWS,
   LOGIN,
   QUEN_MAT_KHAU,
   RESET_PASSWORD,
@@ -88,7 +90,6 @@ export const addCart = (formData) => async (dispatch) => {
 export const addOrder = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addOrder(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Đặt hàng thành công hàng thành công!");
       dispatch({ type: ADD_ORDER, payload: true });
@@ -139,7 +140,6 @@ export const getOrderUser = (userId) => async (dispatch) => {
 export const Canceled = (formData) => async (dispatch) => {
   try {
     const { data } = await api.Canceled(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Hủy đơn hàng công hàng thành công!");
       dispatch({ type: CANCELED, payload: true });
@@ -162,7 +162,6 @@ export const Canceled = (formData) => async (dispatch) => {
 export const deleteCart = (formData) => async (dispatch) => {
   try {
     const { data } = await api.deleteCart(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("xóa giỏ hàng thành công!");
       dispatch({ type: DELETE_CART, payload: true });
@@ -252,6 +251,29 @@ export const getProductsByCategory = (categoryId) => async (dispatch) => {
   try {
     const { data } = await api.getProductsByCategory(categoryId);
     dispatch({ type: GET_PRODUCTS_BY_CATEGORY, payload: data.retObj });
+  } catch (error) {
+    console.log("Redux Error", error);
+  }
+};
+
+export const addReview = (formData) => async (dispatch) => {
+  try {
+    const { data } = await api.addReview(formData);
+    if (data.success === true) {
+      toast.success("Đánh giá sản phẩm thành công!");
+      dispatch({ type: ADD_REVIEW, payload: true });
+    } else {
+      dispatch({ type: SET_ERRORS, payload: data });
+    }
+  } catch (error) {
+    dispatch({ type: SET_ERRORS, payload: error.response.data });
+  }
+};
+
+export const getProductReviews = (product_id) => async (dispatch) => {
+  try {
+    const { data } = await api.getProductReviews(product_id);
+    dispatch({ type: GET_PRODUCT_REVIEWS, payload: data.reviews });
   } catch (error) {
     console.log("Redux Error", error);
   }

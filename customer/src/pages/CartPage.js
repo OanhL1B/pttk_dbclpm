@@ -1,49 +1,27 @@
 import React from "react";
-
 import { useDispatch, useSelector } from "react-redux";
 import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import {
-  deleteCart,
-  getCartUser,
-  getCategories,
-  getProducts,
-  updateCartQuantity,
-} from "../redux/actions";
+import { deleteCart, getCartUser, updateCartQuantity } from "../redux/actions";
 import { Link } from "react-router-dom";
 import { DELETE_CART } from "../redux/actionTypes";
 import Swal from "sweetalert2";
+import Title from "../components/Title";
+import IconCategory from "../components/IconCategory";
 
 const Cart = () => {
-  // thêm để lọc
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCategories());
-    dispatch(getProducts());
-  }, [dispatch]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isFiltering, setIsFiltering] = useState(false);
-
-  const handleCategoryFilter = (categoryId) => {
-    setSelectedCategory(categoryId);
-    setIsFiltering(true);
-  };
-
-  // end
   const store = useSelector((state) => state);
-
   const [totalAmount, setTotalAmount] = useState(null);
   const user = JSON.parse(localStorage.getItem("user"));
   const userCarts = useSelector((state) => state.customer?.userCarts);
-  console.log("userCarts", userCarts);
   const [updatedQuantities, setUpdatedQuantities] = useState({});
 
   useEffect(() => {
     dispatch(getCartUser(user?.userData?.id));
   }, []);
 
-  console.log("userCarts", userCarts);
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < userCarts?.length; index++) {
@@ -52,13 +30,12 @@ const Cart = () => {
         Number(
           updatedQuantities[userCarts[index].id] || userCarts[index].quantity
         ) *
-          userCarts[index].price;
+          userCarts[index]?.product?.price;
     }
     setTotalAmount(sum);
   }, [userCarts, updatedQuantities]);
 
   const handleDelete = (id) => {
-    console.log("id", id);
     Swal.fire({
       title: "Bạn có chắc chắn muốn xóa?",
       text: "Hành động này sẽ không thể hoàn tác!",
@@ -107,10 +84,9 @@ const Cart = () => {
 
   return (
     <div className="bg-gray-100">
-      <Header
-        onCategoryFilter={handleCategoryFilter}
-        selectedCategoryId={selectedCategory}
-      />
+      <Header />
+      <Title />
+      <IconCategory />
       {userCarts.length === 0 && (
         <div className="text-center">
           Giỏ hàng đang trống, cùng thêm vào giỏ hàng nào!{" "}
@@ -159,7 +135,7 @@ const Cart = () => {
                     </div>
                   </td>
                   <td className="px-4 py-1 text-center border border-[#c7c2c2]">
-                    {item.price}
+                    {item?.product.price}
                   </td>
                   <td className="px-4 py-1 text-center border border-[#c7c2c2]">
                     <div className="flex items-center gap-3 cart-col-3">

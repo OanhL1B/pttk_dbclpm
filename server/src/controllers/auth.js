@@ -81,9 +81,6 @@ export const login = async (req, res) => {
       { expiresIn: "2d" }
     );
 
-    // Log successful logins
-    console.log(`User ${user.email} logged in successfully.`);
-
     return res.status(200).json({
       success: true,
       accessToken,
@@ -102,8 +99,6 @@ export const login = async (req, res) => {
       },
     });
   } catch (error) {
-    // Log errors for further investigation
-    console.error("Error occurred during login:", error);
     return res.status(500).json({
       success: false,
       msg: "Internal server error",
@@ -157,7 +152,7 @@ export const forgotPassword = async (req, res) => {
       throw new Error("Email này chưa được được ký tài khoản!");
     }
 
-    const resetToken = user.createPasswordChangedToken(); // Assuming you have a method in your Sequelize model to generate reset token
+    const resetToken = user.createPasswordChangedToken();
     await user.save();
 
     const resetLink = `http://localhost:3000/forgot-password/api/user/reset-password/${resetToken}`;
@@ -206,11 +201,9 @@ export const resetPassword = async (req, res) => {
       throw new Error("Invalid reset token or token expired");
     }
 
-    // Hash the new password before updating
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // Update user password and reset token fields
     user.password = hashedPassword;
     user.passwordResetToken = null;
     user.passwordChangedAt = new Date().toISOString();
@@ -253,7 +246,6 @@ export const changePassword = async (req, res) => {
     }
 
     const isCorrectPassword = await user.isCorrectPassword(currentPassword);
-    console.log(isCorrectPassword);
 
     if (!isCorrectPassword) {
       return res.status(401).json({

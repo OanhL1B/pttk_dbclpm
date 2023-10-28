@@ -1,24 +1,22 @@
 import db from "../models";
-import { v4 } from "uuid";
+const { v4: uuidv4 } = require("uuid");
 
 export const createOrder = async (req, res) => {
   try {
-    const { userId, productItems, shippingAddress, total_price, phone_Number } =
-      req.body;
+    const { userId, productItems, shippingAddress, total_price } = req.body;
 
     const newOrder = await db.Order.create({
-      id: v4(),
+      id: uuidv4(),
       user_id: userId,
       order_status: "pending",
       shipping_address: shippingAddress,
-      phone_Number: phone_Number,
+      phone_Number: "0961319366",
       total_price: total_price,
     });
 
     await db.Product_item.bulkCreate(
       productItems.map((item) => ({
-        id: v4(),
-        order_id: newOrder.id,
+        order_id: newOrder?.id,
         product_id: item.product_id,
         quantity: item.quantity,
         price: item.price,
@@ -38,7 +36,7 @@ export const createOrder = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ backendError: "Internal Server Error" });
+    res.status(500).json(error);
   }
 };
 
@@ -63,7 +61,11 @@ export const getOrdersByUser = async (req, res) => {
       ],
     });
 
-    res.status(200).json({ success: true, retObj: userOrders });
+    const productItems = await db.Product_item.findAll({});
+
+    res
+      .status(200)
+      .json({ success: true, retObj: userOrders, productItems: productItems });
   } catch (error) {
     console.error(error);
     res.status(500).json({ backendError: "Internal Server Error" });
@@ -105,14 +107,12 @@ export const updateOrderStatus = async (req, res) => {
   try {
     const { orderId, status, Order_ReviewerId } = req.body;
 
-    // Truy vấn đơn hàng từ cơ sở dữ liệu
     const order = await db.Order.findByPk(orderId);
 
     if (!order) {
       return res.status(404).json({ error: "Order not found" });
     }
 
-    // Cập nhật trạng thái và người xác nhận của đơn hàng
     await order.update({
       order_status: status,
       Order_ReviewerId: Order_ReviewerId,
@@ -128,6 +128,7 @@ export const updateOrderStatus = async (req, res) => {
     res.status(500).json({ backendError: "Internal Server Error" });
   }
 };
+
 export const getOrders = async (req, res) => {
   try {
     const orders = await db.Order.findAll({
@@ -138,15 +139,24 @@ export const getOrders = async (req, res) => {
         "order_status",
         "total_price",
       ],
-      order: [["createdAt", "DESC"]], // Sắp xếp theo createdAt giảm dần
+      order: [["createdAt", "DESC"]],
+      // include: [
+      //   {
+      //     model: db.User,
+      //     as: "user",
+      //     attributes: ["id", "firstName", "lastName"],
+      //   },
+      // ],
       include: [
         {
-          model: db.User,
-          as: "user", // Đặt alias để tránh xung đột với các quan hệ khác
-          attributes: [
-            "id",
-            "firstName",
-            "lastName" /* thêm các trường khác cần lấy */,
+          model: db.Product_item,
+          as: "product",
+          include: [
+            {
+              model: db.Product,
+              as: "product",
+              attributes: ["id", "productName", "thumb"],
+            },
           ],
         },
       ],
@@ -162,6 +172,7 @@ export const getOrders = async (req, res) => {
     res.status(500).json({ backendError: "Internal Server Error" });
   }
 };
+
 export const cancelOrder = async (req, res) => {
   try {
     const orderId = req.params.orderId;

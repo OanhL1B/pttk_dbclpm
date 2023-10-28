@@ -17,7 +17,6 @@ const Product = ({ item }) => {
         product_id: item.id,
         user_id: user?.userData?.id,
         quantity: 1,
-        price: item.price,
       })
     );
     dispatch(getCartUser(user?.userData?.id));

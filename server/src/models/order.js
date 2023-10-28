@@ -20,7 +20,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Order.init(
     {
-      user_id: DataTypes.INTEGER,
+      user_id: DataTypes.STRING,
       order_status: DataTypes.STRING,
       shipping_address: DataTypes.TEXT,
       phone_Number: DataTypes.STRING,
@@ -28,7 +28,6 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-
       modelName: "Order",
     }
   );

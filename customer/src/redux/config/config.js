@@ -14,5 +14,6 @@ APIV1.interceptors.request.use((req) => {
       JSON.parse(localStorage.getItem("user")).accessToken
     }`;
   }
+
   return req;
 });

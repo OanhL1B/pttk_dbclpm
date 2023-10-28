@@ -11,6 +11,7 @@ import SuccessPage from "./pages/SuccessPage";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
 import ProfilePage from "./pages/ProfilePage";
+import Product_Category from "./pages/Product_Category";
 function App() {
   return (
     <Routes>
@@ -28,6 +29,10 @@ function App() {
         element={<ResetPassword />}
       ></Route>
       <Route path="/profile" element={<ProfilePage />}></Route>
+      <Route
+        path="/collections/:categoryId"
+        element={<Product_Category />}
+      ></Route>
     </Routes>
   );
 }

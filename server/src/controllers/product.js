@@ -17,7 +17,6 @@ export const createProduct = async (req, res) => {
   } = req.body;
   try {
     if (!productName && !category_id && !description) {
-      console.log(productName, category_id, description);
       return res.status(400).json({
         success: false,
         mes: "Missing inputs!",
@@ -157,7 +156,6 @@ export const updateProduct = async (req, res) => {
       return res.status(400).json({ productError: "Danh mục không tồn tại" });
     }
 
-    // Cập nhật thông tin sản phẩm
     await product.update({
       productName: productName,
       category_id: category_id,
@@ -208,7 +206,6 @@ export const deleteProduct = async (req, res) => {
         ],
       });
 
-      console.log("productInOrder", productInOrder);
       if (productInCart || productInOrder) {
         return res.status(400).json({
           productError:
@@ -228,56 +225,10 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
-// export const getProductsByCategory = async (req, res) => {
-//   try {
-//     const categoryId = req.params.categoryId; // Lấy ID danh mục từ tham số yêu cầu
-
-//     // Truy vấn sản phẩm dựa trên ID danh mục
-//     const products = await db.Product.findAll({
-//       where: {
-//         category_id: categoryId,
-//       },
-//       attributes: [
-//         "productName",
-//         "id",
-//         "description",
-//         "images",
-//         "thumb",
-//         "material",
-//         "size",
-//         "design",
-//         "product_status",
-//         "price",
-//         "quantity",
-//       ],
-//       include: [
-//         {
-//           model: db.Category,
-//           as: "category",
-//           attributes: ["id", "categoryName"],
-//         },
-//       ],
-//     });
-
-//     // Trả về kết quả
-//     res.status(200).json({
-//       success: true,
-//       message: "Hiển thị sản phẩm theo danh mục thành công",
-//       retObj: products,
-//     });
-//   } catch (error) {
-//     console.error("Lỗi Backend", error);
-//     res.status(500).json({
-//       success: false,
-//       message: "Lỗi server: " + error.message,
-//     });
-//   }
-// };
 export const getProductsByCategory = async (req, res) => {
   try {
     const categoryId = req.params.categoryId;
 
-    // Kiểm tra nếu categoryId là "all", trả về tất cả sản phẩm
     if (categoryId === "all") {
       const allProducts = await db.Product.findAll({
         attributes: [
@@ -308,7 +259,6 @@ export const getProductsByCategory = async (req, res) => {
         retObj: allProducts,
       });
     } else {
-      // Nếu không phải là "all", thực hiện truy vấn theo categoryId
       const products = await db.Product.findAll({
         where: {
           category_id: categoryId,

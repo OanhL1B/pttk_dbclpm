@@ -13,6 +13,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { Avatar } from "@mui/material";
 import ImageUpload from "../components/ImageUpload";
+import Title from "../components/Title";
+import IconCategory from "../components/IconCategory";
 
 const modalStyles = {
   content: {
@@ -30,16 +32,6 @@ const modalStyles = {
 const ProfilePage = () => {
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getCategories());
-    dispatch(getProducts());
-  }, [dispatch]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isFiltering, setIsFiltering] = useState(false);
-  const handleCategoryFilter = (categoryId) => {
-    setSelectedCategory(categoryId);
-    setIsFiltering(true);
-  };
   useEffect(() => {
     dispatch(getCurrentUser());
   }, [dispatch]);
@@ -130,11 +122,9 @@ const ProfilePage = () => {
 
   return (
     <>
-      <Header
-        onCategoryFilter={handleCategoryFilter}
-        selectedCategoryId={selectedCategory}
-      />
-
+      <Header />
+      <Title />
+      <IconCategory />
       <div>
         <div className="mx-2 mt-10 item-center ">
           <div className="items-center justify-center space-y-5">

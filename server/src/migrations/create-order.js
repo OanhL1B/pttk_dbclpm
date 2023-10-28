@@ -6,10 +6,11 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
+
       user_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       order_status: {
         type: Sequelize.STRING,

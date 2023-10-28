@@ -11,6 +11,4 @@ router.put("/", [verifyToken], cartController.updateCartItemQuantity);
 
 router.delete("/:cartItemId", [verifyToken], cartController.removeFromCart);
 
-// router.delete("/clear/:userId", [verifyToken], cartController.clearCart);
-
 export default router;

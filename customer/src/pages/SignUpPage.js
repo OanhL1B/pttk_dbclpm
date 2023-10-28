@@ -10,66 +10,58 @@ import { ADD_USER, SET_ERRORS } from "../redux/actionTypes";
 import { addUser } from "../redux/actions";
 
 const SignUpPage = () => {
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [address, setAddress] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const store = useSelector((state) => state);
+
   const [error, setError] = useState({});
 
+  const [value, setValue] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    address: "",
+    email: "",
+    password: "",
+  });
   useEffect(() => {
     if (store.errors) {
       setError(store.errors);
+      setValue({ ...value });
     }
   }, [store.errors]);
 
   const signup = (e) => {
     e.preventDefault();
     setLoading(true);
-    dispatch(
-      addUser({
-        email: email,
-        password: password,
-        firstName: firstName,
-        lastName: lastName,
-        phoneNumber: phoneNumber,
-        address: address,
-      })
-    );
+    dispatch(addUser(value));
   };
   useEffect(() => {
     if (store.errors) {
       setLoading(false);
-      setEmail("");
-      setPassword("");
-      setAddress("");
-      setEmail("");
+
+      setValue({ ...value });
       setError("");
-      setFirstName("");
-      setLastName("");
-      setPassword("");
-      setPhoneNumber("");
     }
   }, [store.errors]);
   useEffect(() => {
     if (store.errors || store.customer.userAdded) {
       setLoading(false);
       if (store.customer.userAdded) {
-        setAddress("");
-        setEmail("");
-        setError("");
-        setFirstName("");
-        setLastName("");
-        setPassword("");
-        setPhoneNumber("");
+        setValue({
+          firstName: "",
+          lastName: "",
+          phoneNumber: "",
+          address: "",
+          email: "",
+          password: "",
+        });
 
         dispatch({ type: SET_ERRORS, payload: {} });
         dispatch({ type: ADD_USER, payload: false });
+        navigate("/login");
       }
     } else {
       setLoading(true);
@@ -111,13 +103,15 @@ const SignUpPage = () => {
             </label>
             <div className="flex items-center w-full bg-white rounded-lg ">
               <input
-                onChange={(e) => setLastName(e.target.value)}
-                value={lastName}
+                value={value.lastName}
+                onChange={(e) =>
+                  setValue({ ...value, lastName: e.target.value })
+                }
                 name="ten"
                 type="text"
                 required
                 className="w-full px-6 py-4 text-sm font-medium bg-transparent border focus:border-[#157572] focus:ring-secondary focus:outline-none focus:ring focus:ring-opacity-40  rounded-xl placeholder:text-text4 dark:placeholder:text-text2 dark:text-white border-strock text-text1 dark:border-darkStroke"
-                placeholder="Vũ Thị Hồng"
+                placeholder="Họ"
               />
             </div>
           </div>
@@ -127,13 +121,15 @@ const SignUpPage = () => {
             </label>
             <div className="flex items-center w-full bg-white rounded-lg ">
               <input
-                onChange={(e) => setFirstName(e.target.value)}
-                value={firstName}
+                value={value.firstName}
+                onChange={(e) =>
+                  setValue({ ...value, firstName: e.target.value })
+                }
                 name="ten"
                 type="text"
                 required
                 className="w-full px-6 py-4 text-sm font-medium bg-transparent border focus:border-[#157572] focus:ring-secondary focus:outline-none focus:ring focus:ring-opacity-40  rounded-xl placeholder:text-text4 dark:placeholder:text-text2 dark:text-white border-strock text-text1 dark:border-darkStroke"
-                placeholder="Oanh"
+                placeholder="Tên"
               />
             </div>
           </div>
@@ -143,8 +139,8 @@ const SignUpPage = () => {
             </label>
             <div className="flex items-center w-full bg-white rounded-lg ">
               <input
-                onChange={(e) => setEmail(e.target.value)}
-                value={email}
+                value={value.email}
+                onChange={(e) => setValue({ ...value, email: e.target.value })}
                 name="email"
                 type="email"
                 required
@@ -164,8 +160,10 @@ const SignUpPage = () => {
 
             <div className="flex items-center w-full bg-white rounded-lg">
               <input
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
+                value={value.password}
+                onChange={(e) =>
+                  setValue({ ...value, password: e.target.value })
+                }
                 required
                 name="password"
                 type={showPassword ? "text" : "password"}
@@ -189,33 +187,35 @@ const SignUpPage = () => {
           </div>
           <div className="flex flex-col w-full h-full mb-4 lg:mb-5 gap-y-2 lg:gap-x-3">
             <label className="self-start inline-block text-sm font-medium cursor-pointer text-text2 dark:text-text3">
-              Số điện thoại *
+              Số điện thoại
             </label>
             <div className="flex items-center w-full bg-white rounded-lg ">
               <input
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                value={phoneNumber}
+                value={value.phoneNumber}
+                onChange={(e) =>
+                  setValue({ ...value, phoneNumber: e.target.value })
+                }
                 name="sodienthoai"
                 type="number"
-                required
                 className="w-full px-6 py-4 text-sm font-medium bg-transparent border focus:border-[#157572] focus:ring-secondary focus:outline-none focus:ring focus:ring-opacity-40  rounded-xl placeholder:text-text4 dark:placeholder:text-text2 dark:text-white border-strock text-text1 dark:border-darkStroke"
-                placeholder="0961319366"
+                placeholder="Nhập số điện thoại..."
               />
             </div>
           </div>
           <div className="flex flex-col w-full h-full mb-4 lg:mb-5 gap-y-2 lg:gap-x-3">
             <label className="self-start inline-block text-sm font-medium cursor-pointer text-text2 dark:text-text3">
-              Địa chỉ *
+              Địa chỉ
             </label>
             <div className="flex items-center w-full bg-white rounded-lg ">
               <input
-                onChange={(e) => setAddress(e.target.value)}
-                value={address}
+                value={value.address}
+                onChange={(e) =>
+                  setValue({ ...value, address: e.target.value })
+                }
                 name="adress"
                 type="text"
-                required
                 className="w-full px-6 py-4 text-sm font-medium bg-transparent border focus:border-[#157572] focus:ring-secondary focus:outline-none focus:ring focus:ring-opacity-40  rounded-xl placeholder:text-text4 dark:placeholder:text-text2 dark:text-white border-strock text-text1 dark:border-darkStroke"
-                placeholder="97 Man Thiện"
+                placeholder="Nhập địa chỉ"
               />
             </div>
           </div>
@@ -234,8 +234,8 @@ const SignUpPage = () => {
               messageColor="#fff"
             />
           )}
-          {error.message ? (
-            <p className="text-red-500">{error.message}</p>
+          {store?.errors?.mes ? (
+            <p className="text-red-500">{store?.errors?.mes}</p>
           ) : null}
         </form>
       </div>

@@ -41,7 +41,6 @@ const Body = () => {
   const shippingAddressObject = shipping_address
     ? JSON?.parse(shipping_address)
     : {};
-  console.log("shippingAddressObject", shippingAddressObject?.firstName);
 
   return (
     <div className="w-full my-8 mt-6 bg-bg_product">

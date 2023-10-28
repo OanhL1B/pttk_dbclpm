@@ -11,7 +11,6 @@ const Body = () => {
   const store = useSelector((state) => state);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState({});
-  console.log("error", error);
   const [value, setValue] = useState({
     categoryName: "",
   });

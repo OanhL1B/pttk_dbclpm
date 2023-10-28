@@ -1,34 +1,18 @@
 import React, { useState, useEffect } from "react";
-
 import { useDispatch, useSelector } from "react-redux";
-
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import {
-  addOrder,
-  getCartUser,
-  getCategories,
-  getProducts,
-} from "../redux/actions";
+import { addOrder, getCartUser } from "../redux/actions";
 import { ADD_ORDER } from "../redux/actionTypes";
 import { useNavigate } from "react-router";
+import Title from "../components/Title";
+import IconCategory from "../components/IconCategory";
 
 const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  useEffect(() => {
-    dispatch(getCategories());
-    dispatch(getProducts());
-  }, [dispatch]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
-  const [isFiltering, setIsFiltering] = useState(false);
-  const handleCategoryFilter = (categoryId) => {
-    setSelectedCategory(categoryId);
-    setIsFiltering(true);
-  };
   const store = useSelector((state) => state);
   const userCarts = useSelector((state) => state.customer?.userCarts);
-  console.log("userCarts", userCarts);
   const user = JSON.parse(localStorage.getItem("user"));
   const [totalAmount, setTotalAmount] = useState(null);
   const [shippingInfo, setShippingInfo] = useState({
@@ -41,7 +25,9 @@ const Checkout = () => {
   useEffect(() => {
     let sum = 0;
     for (let index = 0; index < userCarts?.length; index++) {
-      sum = sum + Number(userCarts[index].quantity) * userCarts[index].price;
+      sum =
+        sum +
+        Number(userCarts[index].quantity) * userCarts[index]?.product.price;
       setTotalAmount(sum);
     }
   }, [userCarts]);
@@ -52,7 +38,7 @@ const Checkout = () => {
       items.push({
         product_id: userCarts[index].product_id,
         quantity: userCarts[index].quantity,
-        price: userCarts[index].price,
+        price: userCarts[index]?.product.price,
       });
     }
     setCartProductState(items);
@@ -93,10 +79,9 @@ const Checkout = () => {
 
   return (
     <>
-      <Header
-        onCategoryFilter={handleCategoryFilter}
-        selectedCategoryId={selectedCategory}
-      />
+      <Header />
+      <Title />
+      <IconCategory />
       <div className="text-xl font-semibold text-center">
         Thông tin giao hàng
       </div>

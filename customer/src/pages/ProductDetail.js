@@ -5,27 +5,24 @@ import Footer from "../components/Footer";
 import AddIcon from "@mui/icons-material/Add";
 import HorizontalRuleIcon from "@mui/icons-material/HorizontalRule";
 import { APIPUBLIC } from "../redux/config/config";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import ReactStars from "react-rating-stars-component";
+import moment from "moment";
 import {
   addCart,
   getCartUser,
   getCategories,
+  getProductReviews,
   getProducts,
 } from "../redux/actions";
 import Title from "../components/Title";
 import IconCategory from "../components/IconCategory";
 const ProductDetail = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getCategories());
-    dispatch(getProducts());
-  }, [dispatch]);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+  const reviews = useSelector((state) => state.customer.allReview);
+
   const [selectedImage, setSelectedImage] = useState(null);
 
-  const handleCategoryFilter = (categoryId) => {
-    setSelectedCategory(categoryId);
-  };
   const { productId } = useParams();
   const [product, setProduct] = useState({});
   const [quantity, setQuantity] = useState(1);
@@ -35,6 +32,7 @@ const ProductDetail = () => {
   const navigate = useNavigate();
   useEffect(() => {
     getProduct();
+    dispatch(getProductReviews(productId));
   }, [productId]);
 
   const getProduct = async () => {
@@ -75,7 +73,6 @@ const ProductDetail = () => {
         product_id: product.id,
         user_id: user?.userData?.id,
         quantity,
-        price: product.price * quantity,
       })
     );
     dispatch(getCartUser(user?.userData?.id));
@@ -87,11 +84,12 @@ const ProductDetail = () => {
   if (thumb) {
     imageArray.push(thumb);
   }
+
   return (
     <div className="bg-gray-100">
-      <Header onCategoryFilter={handleCategoryFilter} />
+      <Header />
       <Title />
-      <IconCategory onCategoryFilter={handleCategoryFilter} />
+      <IconCategory />
       <div className="p-10 md:flex md:justify-center">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-full max-w-xs md:max-w-2xl">
@@ -162,6 +160,38 @@ const ProductDetail = () => {
           >
             THÊM VÀO GIỎ
           </button>
+
+          <div className="w-full h-full mt-10">
+            <h1>ĐÁNH GIÁ SẢN PHẨM</h1>
+
+            <h1>
+              {reviews.map((review, index) => (
+                <div className="flex flex-col border-b-2 ">
+                  <h1 className="mt-2 mb-2 text-base font-semibold">
+                    {review?.user?.lastName} {review?.user?.firstName}
+                    <div className="mb-2">
+                      <ReactStars
+                        count={5}
+                        size={24}
+                        value={review.rating}
+                        edit={false}
+                        activeColor="#ffd700"
+                      />
+                    </div>
+                  </h1>
+                  <div>{moment(review.createdAt).format("DD/MM/YYYY")}</div>
+                  <div>{review.comment}</div>
+                  <div className="w-[180px] h-[180px] bg-[#DDDEEE] bg-opacity-50 object-cover  my-2">
+                    <img
+                      src={review?.image}
+                      alt="Thumbnail"
+                      className="object-cover w-full h-full"
+                    />
+                  </div>
+                </div>
+              ))}
+            </h1>
+          </div>
         </div>
       </div>
       <Footer />

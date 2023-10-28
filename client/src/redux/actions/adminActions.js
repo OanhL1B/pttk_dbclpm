@@ -2,14 +2,14 @@ import { toast } from "react-toastify";
 import {
   ADD_CATEGORY,
   ADD_PRICELIST,
-  ADD_PRODUCT,
   ADD_PRODUCT_PRICE,
+  ADD_PRODUCT,
   DELETE_CATEGORY,
   DELETE_PRODUCT,
   GET_ALL_CATEGOIES,
   GET_ALL_PRICELIST,
-  GET_ALL_PRODUCT,
   GET_ALL_PRODUCT_PRICE,
+  GET_ALL_PRODUCT,
   GET_CURRENT_USER,
   GET_INVENTORY,
   GET_ORDERS,
@@ -20,10 +20,10 @@ import {
   UPDATE_ORDER_STATUS,
   UPDATE_PASSWORD,
   UPDATE_PRICELIST,
-  UPDATE_PRODUCT,
   UPDATE_PRODUCT_PRICE,
-  UPDATE_USER,
+  UPDATE_PRODUCT,
   UPDATE_USER_BY_ADMIN,
+  UPDATE_USER,
 } from "../actionTypes";
 import * as api from "../api/adminapi";
 
@@ -76,7 +76,6 @@ export const getpricelists = () => async (dispatch) => {
 export const addProduct = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addProduct(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Thêm  mới sản phẩm thành công!");
       dispatch({ type: ADD_PRODUCT, payload: true });
@@ -123,7 +122,6 @@ export const getProductPrices = () => async (dispatch) => {
 export const updateCategory = (formData) => async (dispatch) => {
   try {
     const { data } = await api.updateCategory(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Cập nhật danh mục thành công!");
       dispatch({ type: UPDATE_CATEGORY, payload: true });
@@ -220,7 +218,6 @@ export const updateUserbyAdmin = (formData) => async (dispatch) => {
 export const getOrders = () => async (dispatch) => {
   try {
     const { data } = await api.getOrders();
-    console.log("data", data);
     if (data.success === true) {
       dispatch({ type: GET_ORDERS, payload: data.retObj });
     } else {
@@ -293,7 +290,6 @@ export const updateUser = (formData) => async (dispatch) => {
 export const deleteCategory = (formData) => async (dispatch) => {
   try {
     const { data } = await api.deleteCategory(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Xóa danh mục thành công!");
       dispatch({ type: DELETE_CATEGORY, payload: true });
@@ -306,7 +302,6 @@ export const deleteCategory = (formData) => async (dispatch) => {
 export const deleteProduct = (formData) => async (dispatch) => {
   try {
     const { data } = await api.deleteProduct(formData);
-    console.log("data", data);
     if (data.success === true) {
       toast.success("Xóa sản phẩm thành công!");
       dispatch({ type: DELETE_PRODUCT, payload: true });

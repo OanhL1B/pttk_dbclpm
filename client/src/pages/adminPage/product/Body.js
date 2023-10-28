@@ -112,7 +112,6 @@ const Body = () => {
   });
 
   const handleEditClick = (pod) => {
-    console.log("pod", pod);
     setModalMode("edit");
     setSelectedProduct(pod);
     setIsModalOpen(true);

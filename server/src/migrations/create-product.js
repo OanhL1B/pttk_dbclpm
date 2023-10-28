@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING,
       },
       category_id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       description: {
         type: Sequelize.TEXT,

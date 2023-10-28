@@ -9,7 +9,6 @@ import moment from "moment";
 const Body = () => {
   const navigate = useNavigate();
   const orders = useSelector((state) => state.admin.allOrder);
-  console.log("orders", orders);
 
   const dispatch = useDispatch();
   useEffect(() => {

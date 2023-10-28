@@ -16,14 +16,3 @@ APIV1.interceptors.request.use((req) => {
   }
   return req;
 });
-
-// // api employee
-// export const APIV2 = axios.create({ baseURL: "http://localhost:5000/" });
-// APIV2.interceptors.request.use((req) => {
-//   if (localStorage.getItem("adminUser")) {
-//     req.headers.Authorization = `Bearer ${
-//       JSON.parse(localStorage.getItem("adminUser")).accessToken
-//     }`;
-//   }
-//   return req;
-// });

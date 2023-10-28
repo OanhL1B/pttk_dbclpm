@@ -36,7 +36,6 @@ const Header = () => {
 
   // phục vụ phần tìm kiếm theo tên sản phẩm
   const [productfilters, setProductFilters] = useState([]);
-  console.log("productfilters", productfilters);
 
   useEffect(() => {
     const getProducts = async () => {

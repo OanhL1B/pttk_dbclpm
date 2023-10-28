@@ -46,3 +46,8 @@ code {
   height: 100%;
   object-fit: cover;
 }
+
+.form-control:focus {
+  box-shadow: none;
+  border-color: inherit;
+}

@@ -33,3 +33,7 @@ export const getCategories = () => APIV1.get("/api/category");
 export const getProducts = () => APIV1.get("/api/product");
 export const getProductsByCategory = (categoryId) =>
   APIPUBLIC.get(`/api/product/category/${categoryId}`);
+// review
+export const addReview = (review) => APIV1.post("/api/review", review);
+export const getProductReviews = (product_id) =>
+  APIV1.get(`/api/review/allproduct_review/${product_id}`);

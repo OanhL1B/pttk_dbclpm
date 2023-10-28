@@ -28,7 +28,6 @@ const Body = () => {
   const users = useSelector((state) => state.admin.allUsers);
 
   const [selectedUser, setSelectedUser] = useState("");
-  console.log("selectedUser", selectedUser);
   const [error, setError] = useState({});
 
   const dispatch = useDispatch();

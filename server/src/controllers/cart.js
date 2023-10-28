@@ -41,7 +41,6 @@ export const addToCart = async (req, res) => {
 export const getCartItems = async (req, res) => {
   try {
     const { user_id } = req.params;
-    // console.log()
 
     const cartItems = await db.Cart.findAll({
       where: { user_id: user_id },
@@ -49,7 +48,7 @@ export const getCartItems = async (req, res) => {
         {
           model: db.Product,
           as: "product",
-          attributes: ["id", "thumb", "productName"],
+          attributes: ["id", "thumb", "productName", "price"],
         },
       ],
     });

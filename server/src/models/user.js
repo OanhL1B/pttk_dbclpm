@@ -14,6 +14,10 @@ module.exports = (sequelize) => {
         foreignKey: "user_id",
         as: "orders",
       });
+      User.hasMany(models.Review, {
+        foreignKey: "user_id",
+        as: "reviews",
+      });
     }
 
     createPasswordChangedToken() {
