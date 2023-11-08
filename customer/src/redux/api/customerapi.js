@@ -31,8 +31,21 @@ export const getCurrentUser = () => APIV1.get("/api/user/current");
 export const getCategories = () => APIV1.get("/api/category");
 // product
 export const getProducts = () => APIV1.get("/api/product");
-export const getProductsByCategory = (categoryId) =>
-  APIPUBLIC.get(`/api/product/category/${categoryId}`);
+export const getProductsByCategory = (
+  categoryId,
+  minPrice,
+  maxPrice,
+  freeship,
+  reset
+) =>
+  APIPUBLIC.get(`/api/product/category/${categoryId}`, {
+    params: {
+      minPrice,
+      maxPrice,
+      freeship,
+      reset,
+    },
+  });
 // review
 export const addReview = (review) => APIV1.post("/api/review", review);
 export const getProductReviews = (product_id) =>

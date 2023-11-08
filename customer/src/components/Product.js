@@ -28,6 +28,11 @@ const Product = ({ item }) => {
           <p className="font-semibold text-red-500">Đã hết hàng</p>
         </div>
       )}
+      {item.free_ship && (
+        <div className="absolute top-[26px] p-2 bg-white bg-opacity-75 rounded-lg left-[69%]">
+          <p className="font-semibold text-red-500">Free ship</p>
+        </div>
+      )}
       {isOutOfStock ? (
         <div>
           <img src={item?.thumb} alt="Product" className="opacity-50" />

@@ -109,6 +109,7 @@ const Body = () => {
     product_status: "",
     price: "",
     quantity: "",
+    free_ship: "",
   });
 
   const handleEditClick = (pod) => {
@@ -127,6 +128,7 @@ const Body = () => {
       quantity: pod.quantity,
       price: pod.price,
       product_status: pod.product_status,
+      free_ship: pod.free_ship,
     });
   };
   const openModal = () => {
@@ -193,6 +195,11 @@ const Body = () => {
       updatedValue.product_status = value.product_status;
     } else {
       updatedValue.product_status = selectedProduct.product_status;
+    }
+    if (value.free_ship !== "") {
+      updatedValue.free_ship = value.free_ship;
+    } else {
+      updatedValue.free_ship = selectedProduct.free_ship;
     }
 
     dispatch(
@@ -582,6 +589,25 @@ const Body = () => {
                     <MenuItem value="">None</MenuItem>
                     <MenuItem value="true">Còn kinh doanh</MenuItem>
                     <MenuItem value="false">Ngừng kinh doanh</MenuItem>
+                  </Select>
+                </div>
+                <div className={classes.WrapInputLabel}>
+                  <h1 className={classes.LabelStyle}>Miễn phí vận chuyển :</h1>
+                  <Select
+                    required
+                    displayEmpty
+                    placeholder={value.free_ship || selectedProduct?.free_ship}
+                    sx={{ height: 36 }}
+                    inputProps={{ "aria-label": "Without label" }}
+                    value={value.free_ship || selectedProduct?.free_ship}
+                    onChange={(e) =>
+                      setValue({ ...value, free_ship: e.target.value })
+                    }
+                    className={`${classes.InputStyle} hover:focus:border-none `}
+                  >
+                    <MenuItem value="">None</MenuItem>
+                    <MenuItem value="true">Miễn phí vận chuyển</MenuItem>
+                    <MenuItem value="false">Không miễn phí vận chuyển</MenuItem>
                   </Select>
                 </div>
               </div>

@@ -75,7 +75,6 @@ export const getProduct = async (req, res) => {
         },
       ],
     });
-
     if (!product) {
       errors.noProductError = "Không tìm thấy sản phẩm";
       return res.status(404).json(errors);
@@ -104,6 +103,7 @@ export const getProducts = async (req, res) => {
         "product_status",
         "price",
         "quantity",
+        "free_ship",
       ],
       include: [
         {
@@ -144,6 +144,7 @@ export const updateProduct = async (req, res) => {
       price,
       quantity,
       product_status,
+      free_ship,
     } = req.body;
 
     const product = await db.Product.findByPk(productId);
@@ -168,6 +169,7 @@ export const updateProduct = async (req, res) => {
       price: price,
       quantity: quantity,
       product_status: product_status,
+      free_ship: free_ship,
     });
 
     res.status(200).json({
@@ -227,10 +229,16 @@ export const deleteProduct = async (req, res) => {
 
 export const getProductsByCategory = async (req, res) => {
   try {
-    const categoryId = req.params.categoryId;
+    const { categoryId, freeship, minPrice, maxPrice, reset } = req.query;
+    let whereCondition = {};
 
-    if (categoryId === "all") {
+    if (categoryId) {
+      whereCondition.category_id = categoryId;
+    }
+
+    if (reset === "true") {
       const allProducts = await db.Product.findAll({
+        where: whereCondition,
         attributes: [
           "productName",
           "id",
@@ -243,6 +251,7 @@ export const getProductsByCategory = async (req, res) => {
           "product_status",
           "price",
           "quantity",
+          "free_ship",
         ],
         include: [
           {
@@ -259,10 +268,18 @@ export const getProductsByCategory = async (req, res) => {
         retObj: allProducts,
       });
     } else {
+      if (freeship === "true") {
+        whereCondition.free_ship = true;
+      }
+
+      if (minPrice !== undefined && maxPrice !== undefined) {
+        whereCondition.price = {
+          [Op.between]: [minPrice, maxPrice],
+        };
+      }
+
       const products = await db.Product.findAll({
-        where: {
-          category_id: categoryId,
-        },
+        where: whereCondition,
         attributes: [
           "productName",
           "id",
@@ -275,6 +292,7 @@ export const getProductsByCategory = async (req, res) => {
           "product_status",
           "price",
           "quantity",
+          "free_ship",
         ],
         include: [
           {
@@ -287,7 +305,7 @@ export const getProductsByCategory = async (req, res) => {
 
       res.status(200).json({
         success: true,
-        message: "Hiển thị sản phẩm theo danh mục thành công",
+        message: "Hiển thị sản phẩm theo điều kiện lọc thành công",
         retObj: products,
       });
     }
@@ -299,7 +317,6 @@ export const getProductsByCategory = async (req, res) => {
     });
   }
 };
-
 module.exports = {
   createProduct,
   getProduct,

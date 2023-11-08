@@ -8,13 +8,7 @@ import { APIPUBLIC } from "../redux/config/config";
 import { useDispatch, useSelector } from "react-redux";
 import ReactStars from "react-rating-stars-component";
 import moment from "moment";
-import {
-  addCart,
-  getCartUser,
-  getCategories,
-  getProductReviews,
-  getProducts,
-} from "../redux/actions";
+import { addCart, getCartUser, getProductReviews } from "../redux/actions";
 import Title from "../components/Title";
 import IconCategory from "../components/IconCategory";
 const ProductDetail = () => {
@@ -134,6 +128,15 @@ const ProductDetail = () => {
           </div>
           <div className="font-base text-[#666666] font-normal">
             {product?.design}
+          </div>
+          <div className="font-base text-[#666666] font-normal">
+            Thông tin thương hiệu sản xuất vui lòng ở link sau:{" "}
+            <a
+              href="https://camelia.vn/pages/about-us"
+              className="text-red-500"
+            >
+              Camelia
+            </a>
           </div>
           <div className="flex items-center mt-10 mb-4 font-bold">
             <span className="font-base text-[#666666] font-normal mr-4">

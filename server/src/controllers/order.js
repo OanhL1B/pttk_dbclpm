@@ -193,7 +193,6 @@ export const cancelOrder = async (req, res) => {
       });
     }
 
-    // Tăng số lượng sản phẩm trong order lên trong bảng Product
     const orderItems = await db.Product_item.findAll({
       where: { order_id: orderId },
     });
@@ -204,7 +203,6 @@ export const cancelOrder = async (req, res) => {
       });
     }
 
-    // Cập nhật trạng thái đơn hàng thành 'canceled'
     await db.Order.update(
       { order_status: "canceled" },
       { where: { id: orderId } }

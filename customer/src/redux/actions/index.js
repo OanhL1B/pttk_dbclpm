@@ -21,6 +21,7 @@ import {
   UPDATE_USER,
 } from "../actionTypes";
 import * as api from "../api/customerapi";
+import { APIPUBLIC } from "../config/config";
 
 export const userLogin = (formData, navigate) => async (dispatch) => {
   try {
@@ -247,15 +248,40 @@ export const getProducts = () => async (dispatch) => {
   }
 };
 
-export const getProductsByCategory = (categoryId) => async (dispatch) => {
-  try {
-    const { data } = await api.getProductsByCategory(categoryId);
-    dispatch({ type: GET_PRODUCTS_BY_CATEGORY, payload: data.retObj });
-  } catch (error) {
-    console.log("Redux Error", error);
-  }
-};
+export const getProductsByCategory =
+  (categoryId, minPrice, maxPrice, freeship, reset) => async (dispatch) => {
+    try {
+      let queryParams = "";
+      if (categoryId) {
+        queryParams += `categoryId=${categoryId}&`;
+      }
+      if (minPrice) {
+        queryParams += `minPrice=${minPrice}&`;
+      }
+      if (maxPrice) {
+        queryParams += `maxPrice=${maxPrice}&`;
+      }
+      if (freeship) {
+        queryParams += `freeship=${freeship}&`;
+      }
+      if (reset) {
+        queryParams += `reset=${reset}&`;
+      }
 
+      const queryString = queryParams.slice(0, -1); // Remove the trailing "&" character
+
+      const url = `/api/product/filter/category/${
+        queryString ? `?${queryString}` : ""
+      }`;
+
+      const response = await APIPUBLIC.get(url);
+
+      const products = response.data.retObj;
+      dispatch({ type: GET_PRODUCTS_BY_CATEGORY, payload: products });
+    } catch (error) {
+      console.log("Redux Error", error);
+    }
+  };
 export const addReview = (formData) => async (dispatch) => {
   try {
     const { data } = await api.addReview(formData);

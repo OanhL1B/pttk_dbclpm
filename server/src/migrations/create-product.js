@@ -6,7 +6,7 @@ module.exports = {
       id: {
         allowNull: false,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
       },
       productName: {
         type: Sequelize.STRING,
@@ -50,6 +50,10 @@ module.exports = {
       updatedAt: {
         allowNull: false,
         type: Sequelize.DATE,
+      },
+      free_ship: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
       },
     });
   },
